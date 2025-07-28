@@ -163,6 +163,12 @@ export default function ImageEditorPage() {
       <div className="mx-auto max-w-7xl">
         {processedSets.length === 0 ? (
           <div className="space-y-6 max-w-5xl mx-auto">
+            <div className="flex flex-col items-center justify-center gap-2 mb-8">
+                <span className="font-headline text-5xl font-bold tracking-tight">Fotix</span>
+                <p className="text-muted-foreground text-center">
+                    Crie conteúdo de alta qualidade para o seu e-commerce com o poder da IA.
+                </p>
+            </div>
             <Card
               onDragEnter={handleDragEvents}
               onDragOver={handleDragEvents}
