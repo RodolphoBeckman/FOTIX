@@ -40,7 +40,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             href="#"
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
-            <Logo />
+            <Logo className="animate-logo-in" />
             <span className="font-headline text-xl font-bold tracking-tight">Fotix</span>
           </Link>
            <div className="flex items-center gap-2">
