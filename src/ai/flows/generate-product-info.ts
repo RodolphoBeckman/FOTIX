@@ -81,7 +81,7 @@ const generateProductInfoFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await ai.generate({
-        model: 'googleai/gemini-pro',
+        model: 'googleai/gemini-pro-vision',
         prompt: `You are an SEO expert specializing in fashion e-commerce.
 
         Generate an SEO-optimized title, description, and tags for the following product, given the product type, details, and image URLs.  Use the image URLs to understand attributes about the product such as color, style, pattern, etc.
