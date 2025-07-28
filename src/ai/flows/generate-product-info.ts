@@ -40,20 +40,21 @@ const generateProductInfoFlow = ai.defineFlow(
   async input => {
     const {output} = await ai.generate({
         model: 'googleai/gemini-1.5-flash',
-        prompt: `You are an SEO expert specializing in fashion e-commerce.
+        prompt: `Você é um especialista em SEO e copywriter para e-commerce de moda.
 
-        Generate an SEO-optimized title, description, and tags for the following product, given the product type, details, and image URLs.  Use the image URLs to understand attributes about the product such as color, style, pattern, etc.
-      
+        Sua tarefa é criar um título, uma descrição e tags otimizadas para o produto a seguir, com base no tipo de produto, detalhes e URLs de imagem. Use as imagens para extrair atributos como cor, estilo, tecido, corte e detalhes da peça.
+
         Product Type: ${input.productType}
         Product Details: ${input.productDetails}
         Image URLs:
         ${input.imageUrls.map(url => `- ${url}`).join('\n')}
         
-        Ensure the title is concise and engaging.
-        The description should be detailed and persuasive.
-        The tags should be relevant and comprehensive.
+        Instruções:
+        - Título: Crie um título curto, objetivo e atrativo que inclua o nome do produto e uma característica principal (ex: "Camisa de Linho Azul Marinho" ou "Vestido Midi Floral com Babados").
+        - Descrição: Escreva uma descrição persuasiva e detalhada. Destaque o tecido, a modelagem, os detalhes (botões, gola, etc.), e sugira ocasiões de uso. Use uma linguagem que inspire a cliente a se imaginar usando a peça.
+        - Tags: Gere tags relevantes e abrangentes, incluindo variações de nome, cor, tecido, estilo e ocasiões.
       
-        Format the output as a JSON object with "title", "description", and "tags" fields.
+        Formate a saída como um objeto JSON com os campos "title", "description" e "tags".
         `,
         output: {
             schema: GenerateProductInfoOutputSchema,
