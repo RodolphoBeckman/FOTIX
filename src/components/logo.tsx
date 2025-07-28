@@ -21,7 +21,7 @@ export function Logo(props: React.SVGProps<SVGSVGElement>) {
         fontWeight="bold"
         fill="hsl(var(--primary-foreground))"
       >
-        FT
+        FX
       </text>
     </svg>
   );

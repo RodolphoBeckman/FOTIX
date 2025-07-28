@@ -40,7 +40,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
             <Logo />
-            <span className="font-headline text-xl font-bold tracking-tight">FashionAI</span>
+            <span className="font-headline text-xl font-bold tracking-tight">Fotix</span>
           </Link>
           {menuItems.map((item) => (
             <Link
@@ -73,7 +73,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 className="flex items-center gap-2 text-lg font-semibold"
               >
                 <Logo />
-                <span className="sr-only">FashionAI</span>
+                <span className="sr-only">Fotix</span>
               </Link>
               {menuItems.map((item) => (
                 <Link

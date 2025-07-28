@@ -4,7 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'FashionAI Toolkit',
+  title: 'Fotix',
   description: 'Kit de ferramentas com IA para criação de conteúdo de e-commerce de moda.',
 };
 
