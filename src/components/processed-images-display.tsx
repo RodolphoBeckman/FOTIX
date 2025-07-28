@@ -20,7 +20,7 @@ interface ProcessedImagesDisplayProps {
   filesForAI: File[];
 }
 
-const productTypes = ["Dress", "Shirt", "T-Shirt", "Pants", "Jeans", "Shorts", "Skirt", "Jacket", "Coat", "Sweater", "Shoes", "Handbag", "Accessory"];
+const productTypes = ["Vestido", "Camisa", "Camiseta", "Calças", "Jeans", "Shorts", "Saia", "Jaqueta", "Casaco", "Suéter", "Sapatos", "Bolsa", "Acessório"];
 
 export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImagesDisplayProps) {
   const [productType, setProductType] = React.useState('');
@@ -30,7 +30,7 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
 
   const handleGenerateContent = async () => {
     if (!productType) {
-      toast({ variant: 'destructive', title: 'Product type required' });
+      toast({ variant: 'destructive', title: 'Tipo de produto obrigatório' });
       return;
     }
     setIsLoading(true);
@@ -40,15 +40,15 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
       const result = await generateProductInfo({
         imageUrls,
         productType,
-        productDetails: 'Modern fashion item for e-commerce store.',
+        productDetails: 'Item de moda moderno para loja de e-commerce.',
       });
       setGeneratedContent(result);
     } catch (error) {
       console.error('AI content generation failed:', error);
       toast({
         variant: 'destructive',
-        title: 'Generation Failed',
-        description: 'Could not generate content. Please try again.',
+        title: 'Falha na Geração',
+        description: 'Não foi possível gerar o conteúdo. Por favor, tente novamente.',
       });
     } finally {
       setIsLoading(false);
@@ -57,7 +57,7 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast({ title: 'Copied to clipboard!' });
+    toast({ title: 'Copiado para a área de transferência!' });
   };
   
   const handleDownload = (dataUrl: string, fileName: string) => {
@@ -73,11 +73,11 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
     <Card className="overflow-hidden animate-in fade-in-0">
       <CardHeader>
         <CardTitle>{imageSet.originalFileName}</CardTitle>
-        <CardDescription>Select a product type to generate SEO-optimized content. Download processed images by hovering over them.</CardDescription>
+        <CardDescription>Selecione um tipo de produto para gerar conteúdo otimizado para SEO. Baixe as imagens processadas passando o mouse sobre elas.</CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <Label>Processed Images</Label>
+          <Label>Imagens Processadas</Label>
           <div className="grid grid-cols-2 gap-4 mt-2">
             {imageSet.images.map((img, idx) => (
               <div key={idx} className="relative group">
@@ -93,7 +93,7 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
                   <p className="text-white font-bold">{`${img.width} x ${img.height}`}</p>
                   <Button size="sm" className="mt-2" onClick={() => handleDownload(img.dataUrl, img.fileName)}>
                     <Download className="mr-2 h-4 w-4"/>
-                    Download
+                    Baixar
                   </Button>
                 </div>
               </div>
@@ -103,10 +103,10 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
         <div className="space-y-4">
           <div className="flex items-end gap-2">
             <div className="flex-grow">
-              <Label htmlFor={`product-type-${imageSet.originalFileName}`}>Product Type</Label>
+              <Label htmlFor={`product-type-${imageSet.originalFileName}`}>Tipo de Produto</Label>
               <Select value={productType} onValueChange={setProductType}>
                 <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
-                  <SelectValue placeholder="Select a type..." />
+                  <SelectValue placeholder="Selecione um tipo..." />
                 </SelectTrigger>
                 <SelectContent>
                   {productTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
@@ -115,21 +115,21 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
             </div>
             <Button onClick={handleGenerateContent} disabled={!productType || isLoading}>
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-              Generate
+              Gerar
             </Button>
           </div>
           {isLoading && (
             <div className="space-y-4 pt-4">
                 <div className="space-y-2">
-                    <Label className="text-muted-foreground">Generating Title...</Label>
+                    <Label className="text-muted-foreground">Gerando Título...</Label>
                     <Skeleton className="h-10 w-full" />
                 </div>
                 <div className="space-y-2">
-                    <Label className="text-muted-foreground">Generating Description...</Label>
+                    <Label className="text-muted-foreground">Gerando Descrição...</Label>
                     <Skeleton className="h-24 w-full" />
                 </div>
                 <div className="space-y-2">
-                    <Label className="text-muted-foreground">Generating Tags...</Label>
+                    <Label className="text-muted-foreground">Gerando Tags...</Label>
                     <Skeleton className="h-10 w-full" />
                 </div>
             </div>
@@ -137,21 +137,21 @@ export function ProcessedImagesDisplay({ imageSet, filesForAI }: ProcessedImages
           {generatedContent && (
             <div className="space-y-4 pt-4 fade-in">
               <div>
-                <Label htmlFor="gen-title">Generated Title</Label>
+                <Label htmlFor="gen-title">Título Gerado</Label>
                 <div className="flex items-center gap-2">
                   <Input id="gen-title" value={generatedContent.title} readOnly />
                   <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                 </div>
               </div>
               <div>
-                <Label htmlFor="gen-desc">Generated Description</Label>
+                <Label htmlFor="gen-desc">Descrição Gerada</Label>
                 <div className="flex items-start gap-2">
                     <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={5} />
                     <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
                 </div>
               </div>
               <div>
-                <Label>Generated Tags</Label>
+                <Label>Tags Geradas</Label>
                 <div className="flex items-start gap-2">
                     <div className="p-3 border rounded-md w-full flex flex-wrap gap-2 min-h-[40px]">
                       {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}

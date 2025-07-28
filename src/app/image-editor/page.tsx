@@ -30,8 +30,8 @@ export default function ImageEditorPage() {
       } else {
         toast({
           variant: 'destructive',
-          title: 'Invalid File Type',
-          description: 'Please upload only image files.',
+          title: 'Tipo de Arquivo Inválido',
+          description: 'Por favor, envie apenas arquivos de imagem.',
         });
       }
     }
@@ -64,8 +64,8 @@ export default function ImageEditorPage() {
     if (files.length === 0) {
       toast({
         variant: 'destructive',
-        title: 'No Files',
-        description: 'Please upload at least one image to process.',
+        title: 'Nenhum Arquivo',
+        description: 'Por favor, envie pelo menos uma imagem para processar.',
       });
       return;
     }
@@ -83,7 +83,7 @@ export default function ImageEditorPage() {
           const allProcessedImages = results.flatMap(set => set.images);
           const uniqueImages = Array.from(new Map(allProcessedImages.map(item => [`${item.width}x${item.height}`, item])).values());
           const groupSet: ProcessedImageSet = {
-              originalFileName: 'Product Group',
+              originalFileName: 'Grupo de Produtos',
               images: uniqueImages,
           };
           setProcessedSets([groupSet]);
@@ -95,8 +95,8 @@ export default function ImageEditorPage() {
       console.error('Image processing failed:', error);
       toast({
         variant: 'destructive',
-        title: 'Processing Failed',
-        description: 'Something went wrong while processing the images.',
+        title: 'Falha no Processamento',
+        description: 'Algo deu errado ao processar as imagens.',
       });
     } finally {
       setIsProcessing(false);
@@ -132,15 +132,15 @@ export default function ImageEditorPage() {
                   className="hidden"
                 />
                 <Upload className="w-12 h-12 text-muted-foreground" />
-                <p className="mt-4 text-lg font-semibold">Drag & drop files here, or click to select</p>
-                <p className="text-sm text-muted-foreground">Supports: JPG, PNG, WEBP</p>
+                <p className="mt-4 text-lg font-semibold">Arraste e solte os arquivos aqui, ou clique para selecionar</p>
+                <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
               </CardContent>
             </Card>
             
             {files.length > 0 && (
               <Card>
                  <CardHeader>
-                    <CardTitle>Staged Files</CardTitle>
+                    <CardTitle>Arquivos em Fila</CardTitle>
                  </CardHeader>
                 <CardContent className="space-y-3">
                   <ul className="space-y-2">
@@ -159,22 +159,22 @@ export default function ImageEditorPage() {
                   </ul>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4">
                     <div>
-                        <Label className="font-medium">Processing Mode</Label>
+                        <Label className="font-medium">Modo de Processamento</Label>
                         <RadioGroup defaultValue="group" value={processingMode} onValueChange={(value) => setProcessingMode(value as ProcessingMode)} className="flex items-center gap-4 mt-2">
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="group" id="group" />
-                                <Label htmlFor="group">Group (all images for one product)</Label>
+                                <Label htmlFor="group">Grupo (todas as imagens para um produto)</Label>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="individual" id="individual" />
-                                <Label htmlFor="individual">Individual (each image is a product)</Label>
+                                <Label htmlFor="individual">Individual (cada imagem é um produto)</Label>
                             </div>
                         </RadioGroup>
                     </div>
 
                     <Button onClick={handleProcessClick} disabled={isProcessing} size="lg">
                       {isProcessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileText className="mr-2 h-4 w-4" />}
-                      Process {files.length} Image{files.length > 1 ? 's' : ''}
+                      Processar {files.length} Imagem{files.length > 1 ? 'ns' : ''}
                     </Button>
                   </div>
                 </CardContent>
@@ -184,8 +184,8 @@ export default function ImageEditorPage() {
         ) : (
             <div className="space-y-8">
                 <div className="flex justify-between items-center">
-                    <h2 className="font-headline text-3xl font-bold">Processed Results</h2>
-                    <Button variant="outline" onClick={handleReset}>Start Over</Button>
+                    <h2 className="font-headline text-3xl font-bold">Resultados Processados</h2>
+                    <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>
                 </div>
                 {processedSets.map((set, index) => (
                     <ProcessedImagesDisplay 
