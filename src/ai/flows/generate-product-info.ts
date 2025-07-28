@@ -39,7 +39,7 @@ const generateProductInfoFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await ai.generate({
-        model: 'googleai/gemini-1.5-flash',
+        model: 'googleai/gemini-1.5-pro',
         prompt: `Você é um especialista em SEO e copywriter para e-commerce de moda.
 
         Sua tarefa é criar um título, uma descrição e tags otimizadas para o produto a seguir, com base no tipo de produto, detalhes e URLs de imagem. Use as imagens para extrair atributos como cor, estilo, tecido, corte e detalhes da peça.
