@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { Loader2, Sparkles, Copy, Download, Star } from 'lucide-react';
+import { Loader2, Sparkles, Copy, Download, Star, Image as ImageIcon, MonitorSmartphone } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { cn } from '@/lib/utils';
 
@@ -46,7 +46,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     setIsLoading(true);
     setGeneratedContent(null);
     try {
-      const filesForAI = isGroup ? imageSet.originalFiles : imageSet.originalFiles;
+      const filesForAI = imageSet.originalFiles;
       const imageUrls = await getCompressedImageUris(filesForAI);
       const result = await generateProductInfo({
         imageUrls,
@@ -100,10 +100,13 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     document.body.removeChild(link);
   }
 
-  const websiteImages = imageSet.images.filter(img => img.width === 1300 && img.height === 2000);
+  const websiteImage = imageSet.images.find(img => img.width === 1300 && img.height === 2000);
+  const erpImageForIndividual = imageSet.images.find(img => img.width === 2000 && img.height === 2000);
+
 
   // Group View
   if (isGroup) {
+    const websiteImages = imageSet.images.filter(img => img.width === 1300 && img.height === 2000);
     return (
       <Card className="overflow-hidden animate-in fade-in-0">
         <CardHeader>
@@ -246,86 +249,89 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
   // Individual View
   return (
     <Card className="overflow-hidden animate-in fade-in-0">
-        <CardHeader>
-            <CardTitle>{imageSet.originalFileName}</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Left side: AI Content Generation */}
-            <div className="space-y-4">
+        <CardContent className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 p-4">
+            <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  {websiteImage && (
+                    <Image 
+                      src={websiteImage.dataUrl}
+                      alt={imageSet.originalFileName}
+                      width={80}
+                      height={123}
+                      className="rounded-md border object-cover aspect-[130/200]"
+                      data-ai-hint="fashion product"
+                    />
+                  )}
+                  <div>
+                    <CardTitle className="text-base font-semibold">{imageSet.originalFileName}</CardTitle>
+                     <div className="flex gap-2 mt-2">
+                       {websiteImage && (
+                         <Button size="sm" variant="outline" onClick={() => handleDownload(websiteImage.dataUrl, websiteImage.fileName)}>
+                           <MonitorSmartphone className="mr-2 h-4 w-4" /> Site
+                         </Button>
+                       )}
+                       {erpImageForIndividual && (
+                         <Button size="sm" variant="outline" onClick={() => handleDownload(erpImageForIndividual.dataUrl, erpImageForIndividual.fileName)}>
+                           <ImageIcon className="mr-2 h-4 w-4" /> ERP
+                         </Button>
+                       )}
+                     </div>
+                  </div>
+                </div>
+            </div>
+            
+            <div className="flex flex-col gap-4">
               <div className="flex items-end gap-2">
                   <div className="flex-grow">
-                  <Label htmlFor={`product-type-${imageSet.originalFileName}`}>Tipo de Produto</Label>
-                  <Select value={productType} onValueChange={setProductType}>
-                      <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
-                      <SelectValue placeholder="Selecione um tipo..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                      {productTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                      </SelectContent>
-                  </Select>
+                    <Label htmlFor={`product-type-${imageSet.originalFileName}`} className="text-xs">Tipo de Produto</Label>
+                    <Select value={productType} onValueChange={setProductType}>
+                        <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
+                          <SelectValue placeholder="Selecione um tipo..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {productTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                   </div>
                   <Button onClick={handleGenerateContent} disabled={!productType || isLoading}>
-                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                  Gerar
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                    Gerar
                   </Button>
               </div>
               {isLoading && (
-                  <div className="space-y-4 pt-4">
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-24 w-full" />
-                      <Skeleton className="h-10 w-full" />
+                  <div className="space-y-2">
+                      <Skeleton className="h-8 w-full" />
+                      <Skeleton className="h-16 w-full" />
+                      <Skeleton className="h-8 w-full" />
                   </div>
               )}
               {generatedContent && (
-                  <div className="space-y-4 pt-4 fade-in">
-                  <div>
-                      <Label htmlFor="gen-title">Título Gerado</Label>
-                      <div className="flex items-center gap-2">
-                      <Input id="gen-title" value={generatedContent.title} readOnly />
-                      <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
-                      </div>
-                  </div>
-                  <div>
-                      <Label htmlFor="gen-desc">Descrição Gerada</Label>
-                      <div className="flex items-start gap-2">
-                          <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={5} />
-                          <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
-                      </div>
-                  </div>
-                  <div>
-                      <Label>Tags Geradas</Label>
-                      <div className="flex items-start gap-2">
-                          <div className="p-3 border rounded-md w-full flex flex-wrap gap-2 min-h-[40px]">
-                          {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                          </div>
-                          <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>
-                      </div>
-                  </div>
-                  </div>
-              )}
-            </div>
-
-            {/* Right side: Processed Image */}
-            <div className="space-y-2">
-                <Label>Imagem para o Site (1300x2000)</Label>
-                {websiteImages.map((img, idx) => (
-                    <div key={idx} className="relative group">
-                        <Image
-                        src={img.dataUrl}
-                        alt={`Imagem para o site ${img.width}x${img.height}`}
-                        width={img.width}
-                        height={img.height}
-                        className="rounded-lg border aspect-[130/200] object-cover w-full"
-                        data-ai-hint="fashion product"
-                        />
-                        <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                            <Button size="sm" onClick={() => handleDownload(img.dataUrl, img.fileName)}>
-                                <Download className="mr-2 h-4 w-4"/>
-                                Baixar
-                            </Button>
+                  <div className="space-y-2 pt-2 fade-in text-xs">
+                    <div>
+                        <Label htmlFor="gen-title">Título</Label>
+                        <div className="flex items-center gap-2">
+                          <Input id="gen-title" value={generatedContent.title} readOnly className="h-8 text-xs" />
+                          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
-                ))}
+                    <div>
+                        <Label htmlFor="gen-desc">Descrição</Label>
+                        <div className="flex items-start gap-2">
+                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={3} className="text-xs" />
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
+                        </div>
+                    </div>
+                    <div>
+                        <Label>Tags</Label>
+                        <div className="flex items-start gap-2">
+                            <div className="p-2 border rounded-md w-full flex flex-wrap gap-1 min-h-[32px]">
+                              {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
+                            </div>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>
+                        </div>
+                    </div>
+                  </div>
+              )}
             </div>
         </CardContent>
     </Card>

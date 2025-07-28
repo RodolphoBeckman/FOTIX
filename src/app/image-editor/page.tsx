@@ -117,8 +117,10 @@ export default function ImageEditorPage() {
     setIsProcessing(true);
     setProcessedSets([]);
     try {
-      // Initially process only for the website format
-      const dimensions = [{ width: 1300, height: 2000 }];
+      const dimensions = processingMode === 'group'
+        ? [{ width: 1300, height: 2000 }] // Only website for group, ERP is on demand
+        : [{ width: 1300, height: 2000 }, { width: 2000, height: 2000 }]; // Both for individual
+
       const results = await processImages(files, dimensions);
 
       if (processingMode === 'group') {
@@ -237,13 +239,15 @@ export default function ImageEditorPage() {
                     <h2 className="font-headline text-3xl font-bold">Resultados Processados</h2>
                     <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>
                 </div>
-                {processedSets.map((set, index) => (
-                    <ProcessedImagesDisplay 
-                        key={processingMode === 'group' ? 'group-set' : set.originalFileName}
-                        imageSet={set} 
-                        isGroup={processingMode === 'group'}
-                    />
-                ))}
+                <div className="space-y-4">
+                  {processedSets.map((set, index) => (
+                      <ProcessedImagesDisplay 
+                          key={processingMode === 'group' ? 'group-set' : set.originalFileName}
+                          imageSet={set} 
+                          isGroup={processingMode === 'group'}
+                      />
+                  ))}
+                </div>
             </div>
         )}
       </div>
