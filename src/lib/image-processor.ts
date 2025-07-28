@@ -22,12 +22,19 @@ async function createImageTask(file: File, width: number, height: number): Promi
         const ctx = canvas.getContext('2d');
         if (!ctx) return reject(new Error('Could not get canvas context'));
         
-        const scale = Math.min(width / img.width, height / img.height);
-        const x = (width - img.width * scale) / 2;
-        const y = (height - img.height * scale) / 2;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, width, height);
-        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+        // Draw blurred background
+        ctx.filter = 'blur(24px)';
+        const bgScale = Math.max(width / img.width, height / img.height);
+        const bgX = (width - img.width * bgScale) / 2;
+        const bgY = (height - img.height * bgScale) / 2;
+        ctx.drawImage(img, bgX, bgY, img.width * bgScale, img.height * bgScale);
+        ctx.filter = 'none';
+
+        // Draw centered image
+        const fgScale = Math.min(width / img.width, height / img.height);
+        const fgX = (width - img.width * fgScale) / 2;
+        const fgY = (height - img.height * fgScale) / 2;
+        ctx.drawImage(img, fgX, fgY, img.width * fgScale, img.height * fgScale);
 
         const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
         resolve({ fileName: `processed_${width}x${height}_${file.name}`, dataUrl, width, height });
