@@ -80,7 +80,47 @@ const generateProductInfoFlow = ai.defineFlow(
     outputSchema: GenerateProductInfoOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const {output} = await ai.generate({
+        model: 'googleai/gemini-pro',
+        prompt: `You are an SEO expert specializing in fashion e-commerce.
+
+        Generate an SEO-optimized title, description, and tags for the following product, given the product type, details, and image URLs.  Use the image URLs to understand attributes about the product such as color, style, pattern, etc.
+      
+        Product Type: ${input.productType}
+        Product Details: ${input.productDetails}
+        Image URLs:
+        ${input.imageUrls.map(url => `- ${url}`).join('\n')}
+        
+        Ensure the title is concise and engaging.
+        The description should be detailed and persuasive.
+        The tags should be relevant and comprehensive.
+      
+        Format the output as a JSON object with "title", "description", and "tags" fields.
+        `,
+        output: {
+            schema: GenerateProductInfoOutputSchema,
+        },
+        config: {
+          safetySettings: [
+            {
+              category: 'HARM_CATEGORY_HATE_SPEECH',
+              threshold: 'BLOCK_ONLY_HIGH',
+            },
+            {
+              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+              threshold: 'BLOCK_NONE',
+            },
+            {
+              category: 'HARM_CATEGORY_HARASSMENT',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+            },
+            {
+              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+              threshold: 'BLOCK_LOW_AND_ABOVE',
+            },
+          ],
+        },
+    });
     return output!;
   }
 );
