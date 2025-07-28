@@ -111,10 +111,9 @@ export default function ImageEditorPage() {
 
       if (processingMode === 'group') {
           const allProcessedImages = results.flatMap(set => set.images);
-          const uniqueImages = Array.from(new Map(allProcessedImages.map(item => [`${item.width}x${item.height}`, item])).values());
           const groupSet: ProcessedImageSet = {
               originalFileName: 'Grupo de Produtos',
-              images: uniqueImages,
+              images: allProcessedImages,
           };
           setProcessedSets([groupSet]);
       } else {
