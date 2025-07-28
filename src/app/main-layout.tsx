@@ -72,7 +72,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 className="flex items-center gap-2 text-lg font-semibold"
               >
                 <Logo />
-                <span className="sr-only">Fotix</span>
+                <span className="font-headline text-xl font-bold tracking-tight">Fotix</span>
               </Link>
               {menuItems.map((item) => (
                 <Link
