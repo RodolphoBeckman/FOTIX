@@ -22,11 +22,10 @@ export default function ImageEditorPage() {
   const { toast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (newFiles: FileList | null) => {
-    if (newFiles) {
-      const addedFiles = Array.from(newFiles).filter(file => file.type.startsWith('image/'));
-      if (addedFiles.length > 0) {
-        setFiles(prevFiles => [...prevFiles, ...addedFiles]);
+  const addFiles = (newFiles: File[]) => {
+      const imageFiles = newFiles.filter(file => file.type.startsWith('image/'));
+      if (imageFiles.length > 0) {
+        setFiles(prevFiles => [...prevFiles, ...imageFiles]);
       } else {
         toast({
           variant: 'destructive',
@@ -34,8 +33,39 @@ export default function ImageEditorPage() {
           description: 'Por favor, envie apenas arquivos de imagem.',
         });
       }
+  };
+
+  const handleFileChange = (newFiles: FileList | null) => {
+    if (newFiles) {
+      addFiles(Array.from(newFiles));
     }
   };
+  
+  React.useEffect(() => {
+    const handlePaste = (event: ClipboardEvent) => {
+      const items = event.clipboardData?.items;
+      if (items) {
+        const pastedFiles: File[] = [];
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].kind === 'file' && items[i].type.startsWith('image/')) {
+            const file = items[i].getAsFile();
+            if(file) {
+              pastedFiles.push(file);
+            }
+          }
+        }
+        if (pastedFiles.length > 0) {
+          addFiles(pastedFiles);
+        }
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+
+    return () => {
+      window.removeEventListener('paste', handlePaste);
+    };
+  }, []);
 
   const handleDragEvents = (e: React.DragEvent) => {
     e.preventDefault();
@@ -119,10 +149,9 @@ export default function ImageEditorPage() {
               onDragOver={handleDragEvents}
               onDragLeave={handleDragEvents}
               onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
-              className={`transition-colors ${isDragging ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/50'}`}
+              className={`transition-colors ${isDragging ? 'border-primary bg-primary/10' : 'border-border'}`}
             >
-              <CardContent className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg cursor-pointer">
+              <CardContent className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg cursor-pointer hover:border-primary/50" onClick={() => fileInputRef.current?.click()}>
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -132,7 +161,7 @@ export default function ImageEditorPage() {
                   className="hidden"
                 />
                 <Upload className="w-12 h-12 text-muted-foreground" />
-                <p className="mt-4 text-lg font-semibold">Arraste e solte os arquivos aqui, ou clique para selecionar</p>
+                <p className="mt-4 text-lg font-semibold">Arraste e solte, cole, ou clique para selecionar</p>
                 <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
               </CardContent>
             </Card>
