@@ -60,19 +60,39 @@ export async function createImageTask(file: File, width: number, height: number,
         const ctx = canvas.getContext('2d');
         if (!ctx) return reject(new Error('Could not get canvas context'));
         
-        // Draw blurred background
-        ctx.filter = 'blur(24px)';
-        const bgScale = Math.max(width / img.width, height / img.height);
-        const bgX = (width - img.width * bgScale) / 2;
-        const bgY = (height - img.height * bgScale) / 2;
-        ctx.drawImage(img, bgX, bgY, img.width * bgScale, img.height * bgScale);
-        ctx.filter = 'none';
+        if (width === 1300 && height === 2000) {
+            // Intelligent crop logic for 1300x2000
+            const targetAspectRatio = width / height;
+            const imageAspectRatio = img.width / img.height;
+            
+            let sourceX = 0, sourceY = 0, sourceWidth = img.width, sourceHeight = img.height;
 
-        // Draw centered image
-        const fgScale = Math.min(width / img.width, height / img.height);
-        const fgX = (width - img.width * fgScale) / 2;
-        const fgY = (height - img.height * fgScale) / 2;
-        ctx.drawImage(img, fgX, fgY, img.width * fgScale, img.height * fgScale);
+            if (imageAspectRatio > targetAspectRatio) {
+                // Image is wider than target, crop horizontally
+                sourceWidth = img.height * targetAspectRatio;
+                sourceX = (img.width - sourceWidth) / 2;
+            } else {
+                // Image is taller than target, crop vertically
+                sourceHeight = img.width / targetAspectRatio;
+                sourceY = (img.height - sourceHeight) / 2;
+            }
+            ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+
+        } else {
+            // Blurred background logic for other sizes (e.g., 2000x2000)
+            ctx.filter = 'blur(24px)';
+            const bgScale = Math.max(width / img.width, height / img.height);
+            const bgX = (width - img.width * bgScale) / 2;
+            const bgY = (height - img.height * bgScale) / 2;
+            ctx.drawImage(img, bgX, bgY, img.width * bgScale, img.height * bgScale);
+            ctx.filter = 'none';
+
+            // Draw centered image
+            const fgScale = Math.min(width / img.width, height / img.height);
+            const fgX = (width - img.width * fgScale) / 2;
+            const fgY = (height - img.height * fgScale) / 2;
+            ctx.drawImage(img, fgX, fgY, img.width * fgScale, img.height * fgScale);
+        }
 
         const dataUrl = await getSizedDataUrl(canvas);
         const fileExtension = dataUrl.startsWith('data:image/jpeg') ? 'jpg' : 'png';
