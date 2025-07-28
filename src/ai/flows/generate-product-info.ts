@@ -31,6 +31,49 @@ export async function generateProductInfo(input: GenerateProductInfoInput): Prom
   return generateProductInfoFlow(input);
 }
 
+const generateProductInfoPrompt = ai.definePrompt({
+  name: 'generateProductInfoPrompt',
+  input: { schema: GenerateProductInfoInputSchema },
+  output: { schema: GenerateProductInfoOutputSchema },
+  prompt: `Você é um especialista em SEO e copywriter para e-commerce de moda.
+
+Sua tarefa é criar um título, uma descrição e tags otimizadas para o produto a seguir, com base no tipo de produto, detalhes e URLs de imagem. Use as imagens para extrair atributos como cor, estilo, tecido, corte e detalhes da peça.
+
+{{#each imageUrls}}
+Image: {{media url=this}}
+{{/each}}
+Product Type: {{{productType}}}
+Product Details: {{{productDetails}}}
+
+Instruções:
+- Título: Crie um título curto, objetivo e atrativo que inclua o nome do produto e uma característica principal (ex: "Camisa de Linho Azul Marinho" ou "Vestido Midi Floral com Babados").
+- Descrição: Escreva uma descrição persuasiva e detalhada. Destaque o tecido, a modelagem, os detalhes (botões, gola, etc.), e sugira ocasiões de uso. Use uma linguagem que inspire a cliente a se imaginar usando a peça.
+- Tags: Gere tags relevantes e abrangentes, incluindo variações de nome, cor, tecido, estilo e ocasiões.
+`,
+  model: 'googleai/gemini-1.5-flash',
+  config: {
+    safetySettings: [
+      {
+        category: 'HARM_CATEGORY_HATE_SPEECH',
+        threshold: 'BLOCK_ONLY_HIGH',
+      },
+      {
+        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+        threshold: 'BLOCK_NONE',
+      },
+      {
+        category: 'HARM_CATEGORY_HARASSMENT',
+        threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+      },
+      {
+        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+        threshold: 'BLOCK_LOW_AND_ABOVE',
+      },
+    ],
+  },
+});
+
+
 const generateProductInfoFlow = ai.defineFlow(
   {
     name: 'generateProductInfoFlow',
@@ -38,48 +81,7 @@ const generateProductInfoFlow = ai.defineFlow(
     outputSchema: GenerateProductInfoOutputSchema,
   },
   async input => {
-    const {output} = await ai.generate({
-        model: 'googleai/gemini-1.5-flash',
-        prompt: `Você é um especialista em SEO e copywriter para e-commerce de moda.
-
-        Sua tarefa é criar um título, uma descrição e tags otimizadas para o produto a seguir, com base no tipo de produto, detalhes e URLs de imagem. Use as imagens para extrair atributos como cor, estilo, tecido, corte e detalhes da peça.
-
-        Product Type: ${input.productType}
-        Product Details: ${input.productDetails}
-        Image URLs:
-        ${input.imageUrls.map(url => `- ${url}`).join('\n')}
-        
-        Instruções:
-        - Título: Crie um título curto, objetivo e atrativo que inclua o nome do produto e uma característica principal (ex: "Camisa de Linho Azul Marinho" ou "Vestido Midi Floral com Babados").
-        - Descrição: Escreva uma descrição persuasiva e detalhada. Destaque o tecido, a modelagem, os detalhes (botões, gola, etc.), e sugira ocasiões de uso. Use uma linguagem que inspire a cliente a se imaginar usando a peça.
-        - Tags: Gere tags relevantes e abrangentes, incluindo variações de nome, cor, tecido, estilo e ocasiões.
-      
-        Formate a saída como um objeto JSON com os campos "title", "description" e "tags".
-        `,
-        output: {
-            schema: GenerateProductInfoOutputSchema,
-        },
-        config: {
-          safetySettings: [
-            {
-              category: 'HARM_CATEGORY_HATE_SPEECH',
-              threshold: 'BLOCK_ONLY_HIGH',
-            },
-            {
-              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-              threshold: 'BLOCK_NONE',
-            },
-            {
-              category: 'HARM_CATEGORY_HARASSMENT',
-              threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-            },
-            {
-              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-              threshold: 'BLOCK_LOW_AND_ABOVE',
-            },
-          ],
-        },
-    });
+    const {output} = await generateProductInfoPrompt(input);
     return output!;
   }
 );
