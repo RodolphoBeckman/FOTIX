@@ -49,14 +49,14 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         <SidebarContent>
             <SidebarMenu>
                 {menuItems.map((item) => (
-                    <Link key={item.href} href={item.href} legacyBehavior passHref>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton isActive={pathname === item.href} tooltip={item.label}>
-                                <item.icon />
-                                <span>{item.label}</span>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
+                  <SidebarMenuItem key={item.href}>
+                    <Link href={item.href}>
+                        <SidebarMenuButton isActive={pathname === item.href} tooltip={item.label}>
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </SidebarMenuButton>
                     </Link>
+                  </SidebarMenuItem>
                 ))}
             </SidebarMenu>
         </SidebarContent>
@@ -65,7 +65,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
             <div className="container flex h-14 items-center">
                 <div className="flex items-center gap-4">
-                    <SidebarTrigger asChild>
+                    <SidebarTrigger>
                         <Button variant="ghost" size="icon" className="md:hidden">
                             <PanelLeft />
                         </Button>
