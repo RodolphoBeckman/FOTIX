@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -42,18 +43,16 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             <Logo />
             <span className="font-headline text-xl font-bold tracking-tight">Fotix</span>
           </Link>
-          {menuItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "transition-colors hover:text-foreground",
-                pathname === item.href ? "text-foreground" : "text-muted-foreground"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+           <div className="flex items-center gap-2">
+            {menuItems.map((item) => (
+              <Button key={item.href} asChild variant="ghost" className={cn(pathname === item.href && "bg-accent text-accent-foreground")}>
+                  <Link href={item.href}>
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                  </Link>
+              </Button>
+            ))}
+          </div>
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -84,6 +83,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                      pathname === item.href ? "text-foreground" : "text-muted-foreground"
                   )}
                 >
+                  <item.icon className="h-5 w-5" />
                   {item.label}
                 </Link>
               ))}
