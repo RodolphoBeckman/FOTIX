@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Loader2, Sparkles, Copy, Download, Star, Image as ImageIcon, MonitorSmartphone } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
-import { cn } from '@/lib/utils';
+import { cn, formatBytes } from '@/lib/utils';
 
 interface ProcessedImagesDisplayProps {
   imageSet: ProcessedImageSet;
@@ -187,7 +187,10 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     )}
                     {erpImage && (
                         <div className="relative group">
-                             <p className="text-xs text-muted-foreground mb-2 text-center font-semibold">ERP (2000x2000)</p>
+                            <div className='text-center mb-2'>
+                                <p className="text-xs text-muted-foreground font-semibold">ERP (2000x2000)</p>
+                                <p className='text-[10px] text-muted-foreground/80'>{formatBytes(erpImage.sizeInBytes)}</p>
+                            </div>
                             <Image
                                 src={erpImage.dataUrl}
                                 alt="Imagem principal para ERP"
@@ -206,7 +209,10 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
                     {websiteImages.map((img, idx) => (
                     <div key={idx} className="relative group">
-                        <p className="text-xs text-muted-foreground mb-2 text-center font-semibold">Site (1300x2000)</p>
+                        <div className='text-center mb-2'>
+                             <p className="text-xs text-muted-foreground font-semibold">Site ({img.width}x{img.height})</p>
+                             <p className='text-[10px] text-muted-foreground/80'>{formatBytes(img.sizeInBytes)}</p>
+                        </div>
                         <Image
                         src={img.dataUrl}
                         alt={`Imagem para o site ${img.width}x${img.height}`}

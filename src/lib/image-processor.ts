@@ -4,6 +4,7 @@ export interface ProcessedImage {
   width: number;
   height: number;
   originalFileIndex: number;
+  sizeInBytes: number;
 }
 
 export type ProcessedImageSet = {
@@ -24,7 +25,7 @@ function getBase64ByteSize(base64String: string) {
     return base64.length * 0.75 - padding;
 }
 
-async function getSizedDataUrl(canvas: HTMLCanvasElement): Promise<string> {
+async function getSizedDataUrl(canvas: HTMLCanvasElement): Promise<{ dataUrl: string; size: number }> {
     let quality = 0.95;
     let dataUrl = canvas.toDataURL('image/jpeg', quality);
     let size = getBase64ByteSize(dataUrl);
@@ -44,7 +45,7 @@ async function getSizedDataUrl(canvas: HTMLCanvasElement): Promise<string> {
         }
     }
 
-    return dataUrl;
+    return { dataUrl, size };
 }
 
 
@@ -94,10 +95,17 @@ export async function createImageTask(file: File, width: number, height: number,
             ctx.drawImage(img, fgX, fgY, img.width * fgScale, img.height * fgScale);
         }
 
-        const dataUrl = await getSizedDataUrl(canvas);
+        const { dataUrl, size } = await getSizedDataUrl(canvas);
         const fileExtension = dataUrl.startsWith('data:image/jpeg') ? 'jpg' : 'png';
         
-        resolve({ fileName: `processed_${width}x${height}_${file.name.replace(/\.[^/.]+$/, "")}.${fileExtension}`, dataUrl, width, height, originalFileIndex });
+        resolve({ 
+            fileName: `processed_${width}x${height}_${file.name.replace(/\.[^/.]+$/, "")}.${fileExtension}`, 
+            dataUrl, 
+            width, 
+            height, 
+            originalFileIndex,
+            sizeInBytes: size
+        });
       };
       img.onerror = reject;
       img.src = e.target?.result as string;
