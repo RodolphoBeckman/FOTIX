@@ -10,11 +10,16 @@ import { ProcessedImagesDisplay } from '@/components/processed-images-display';
 import { formatBytes } from '@/lib/utils';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import Image from 'next/image';
 
 type ProcessingMode = 'individual' | 'group';
 
+interface FileWithPreview extends File {
+    preview: string;
+}
+
 export default function ImageEditorPage() {
-  const [files, setFiles] = React.useState<File[]>([]);
+  const [files, setFiles] = React.useState<FileWithPreview[]>([]);
   const [isDragging, setIsDragging] = React.useState(false);
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [processedSets, setProcessedSets] = React.useState<ProcessedImageSet[]>([]);
@@ -25,7 +30,10 @@ export default function ImageEditorPage() {
   const addFiles = (newFiles: File[]) => {
       const imageFiles = newFiles.filter(file => file.type.startsWith('image/'));
       if (imageFiles.length > 0) {
-        setFiles(prevFiles => [...prevFiles, ...imageFiles]);
+        const filesWithPreview: FileWithPreview[] = imageFiles.map(file => Object.assign(file, {
+            preview: URL.createObjectURL(file)
+        }));
+        setFiles(prevFiles => [...prevFiles, ...filesWithPreview]);
       } else {
         toast({
           variant: 'destructive',
@@ -64,7 +72,9 @@ export default function ImageEditorPage() {
 
     return () => {
       window.removeEventListener('paste', handlePaste);
+      files.forEach(file => URL.revokeObjectURL(file.preview));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDragEvents = (e: React.DragEvent) => {
@@ -87,6 +97,10 @@ export default function ImageEditorPage() {
   };
 
   const removeFile = (index: number) => {
+    const fileToRemove = files[index];
+    if (fileToRemove) {
+        URL.revokeObjectURL(fileToRemove.preview);
+    }
     setFiles(files.filter((_, i) => i !== index));
   };
   
@@ -133,6 +147,7 @@ export default function ImageEditorPage() {
   };
   
   const handleReset = () => {
+    files.forEach(file => URL.revokeObjectURL(file.preview));
     setFiles([]);
     setProcessedSets([]);
     setIsProcessing(false);
@@ -170,21 +185,22 @@ export default function ImageEditorPage() {
                  <CardHeader>
                     <CardTitle>Arquivos em Fila</CardTitle>
                  </CardHeader>
-                <CardContent className="space-y-3">
-                  <ul className="space-y-2">
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
                     {files.map((file, index) => (
-                      <li key={index} className="flex items-center justify-between p-2 rounded-md bg-secondary/50">
-                        <div className="flex items-center gap-3">
-                          <ImageIcon className="w-5 h-5 text-muted-foreground" />
-                          <span className="font-mono text-sm">{file.name}</span>
-                          <span className="text-xs text-muted-foreground">{formatBytes(file.size)}</span>
+                      <div key={index} className="relative group aspect-square">
+                        <Image src={file.preview} alt={file.name} fill className="object-cover rounded-md border" />
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
+                            <Button variant="destructive" size="icon" className="h-8 w-8" onClick={() => removeFile(index)}>
+                                <X className="w-4 h-4" />
+                            </Button>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeFile(index)}>
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </li>
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs p-1 truncate rounded-b-md">
+                            {file.name}
+                        </div>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4">
                     <div>
                         <Label className="font-medium">Modo de Processamento</Label>
