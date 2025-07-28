@@ -205,18 +205,18 @@ export default function ImageEditorPage() {
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4">
                     <div>
-                      <Label className="font-medium">Modo de Processamento</Label>
+                      <Label className="font-medium text-muted-foreground">Modo de Processamento</Label>
                       <Tabs
                         value={processingMode}
                         onValueChange={(value) => setProcessingMode(value as ProcessingMode)}
                         className="mt-2"
                       >
-                        <TabsList>
-                          <TabsTrigger value="group">
-                            Grupo (todas as imagens para um produto)
+                        <TabsList className="bg-secondary/50">
+                          <TabsTrigger value="group" className="font-headline text-base data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                            Grupo
                           </TabsTrigger>
-                          <TabsTrigger value="individual">
-                            Individual (cada imagem é um produto)
+                          <TabsTrigger value="individual" className="font-headline text-base data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                            Individual
                           </TabsTrigger>
                         </TabsList>
                       </Tabs>
