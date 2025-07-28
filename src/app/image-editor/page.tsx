@@ -8,11 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { processImages, ProcessedImageSet } from '@/lib/image-processor';
 import { ProcessedImagesDisplay } from '@/components/processed-images-display';
 import { formatBytes } from '@/lib/utils';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 
-type ProcessingMode = 'individual' | 'group';
+type ProcessingMode = 'group' | 'individual';
 
 interface FileWithPreview extends File {
     preview: string;
@@ -205,17 +205,21 @@ export default function ImageEditorPage() {
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4">
                     <div>
-                        <Label className="font-medium">Modo de Processamento</Label>
-                        <RadioGroup defaultValue="group" value={processingMode} onValueChange={(value) => setProcessingMode(value as ProcessingMode)} className="flex items-center gap-4 mt-2">
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="group" id="group" />
-                                <Label htmlFor="group">Grupo (todas as imagens para um produto)</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="individual" id="individual" />
-                                <Label htmlFor="individual">Individual (cada imagem é um produto)</Label>
-                            </div>
-                        </RadioGroup>
+                      <Label className="font-medium">Modo de Processamento</Label>
+                      <Tabs
+                        value={processingMode}
+                        onValueChange={(value) => setProcessingMode(value as ProcessingMode)}
+                        className="mt-2"
+                      >
+                        <TabsList>
+                          <TabsTrigger value="group">
+                            Grupo (todas as imagens para um produto)
+                          </TabsTrigger>
+                          <TabsTrigger value="individual">
+                            Individual (cada imagem é um produto)
+                          </TabsTrigger>
+                        </TabsList>
+                      </Tabs>
                     </div>
 
                     <Button onClick={handleProcessClick} disabled={isProcessing} size="lg">
