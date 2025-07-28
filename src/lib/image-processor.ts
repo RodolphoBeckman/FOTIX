@@ -12,12 +12,48 @@ export type ProcessedImageSet = {
   images: ProcessedImage[];
 };
 
+const TARGET_FILE_SIZE_KB = 349;
+const TARGET_FILE_SIZE_BYTES = TARGET_FILE_SIZE_KB * 1024;
+
+function getBase64ByteSize(base64String: string) {
+    // Remove metadata
+    const base64 = base64String.split(',')[1];
+    if (!base64) return 0;
+    // Calculate the size
+    const padding = (base64.match(/=/g) || []).length;
+    return base64.length * 0.75 - padding;
+}
+
+async function getSizedDataUrl(canvas: HTMLCanvasElement): Promise<string> {
+    let quality = 0.95;
+    let dataUrl = canvas.toDataURL('image/jpeg', quality);
+    let size = getBase64ByteSize(dataUrl);
+
+    // Iteratively reduce quality to meet size requirement
+    while (size > TARGET_FILE_SIZE_BYTES && quality > 0.1) {
+        quality -= 0.05;
+        dataUrl = canvas.toDataURL('image/jpeg', quality);
+        size = getBase64ByteSize(dataUrl);
+    }
+    
+    // If it's a png, try to convert to jpeg to reduce size
+    if (dataUrl.startsWith('data:image/png')) {
+        const jpegUrl = canvas.toDataURL('image/jpeg', 0.9);
+        if (getBase64ByteSize(jpegUrl) < size) {
+            return getSizedDataUrl(canvas); // re-run with jpeg logic
+        }
+    }
+
+    return dataUrl;
+}
+
+
 export async function createImageTask(file: File, width: number, height: number, originalFileIndex: number): Promise<ProcessedImage> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
-      img.onload = () => {
+      img.onload = async () => {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -38,8 +74,10 @@ export async function createImageTask(file: File, width: number, height: number,
         const fgY = (height - img.height * fgScale) / 2;
         ctx.drawImage(img, fgX, fgY, img.width * fgScale, img.height * fgScale);
 
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-        resolve({ fileName: `processed_${width}x${height}_${file.name}`, dataUrl, width, height, originalFileIndex });
+        const dataUrl = await getSizedDataUrl(canvas);
+        const fileExtension = dataUrl.startsWith('data:image/jpeg') ? 'jpg' : 'png';
+        
+        resolve({ fileName: `processed_${width}x${height}_${file.name.replace(/\.[^/.]+$/, "")}.${fileExtension}`, dataUrl, width, height, originalFileIndex });
       };
       img.onerror = reject;
       img.src = e.target?.result as string;
