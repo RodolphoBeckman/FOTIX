@@ -21,7 +21,7 @@ interface ProcessedImagesDisplayProps {
   isGroup: boolean;
 }
 
-const productTypes = ["Vestido", "Camisa", "Camiseta", "Calças", "Jeans", "Shorts", "Saia", "Jaqueta", "Casaco", "Bolsa", "Acessório", "Conjunto"];
+const productTypes = ["Vestido", "Camisa", "Camiseta", "Calças", "Jeans", "Shorts", "Saia", "Jaqueta", "Casaco", "Colete", "Bolsa", "Acessório", "Conjunto"];
 
 export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDisplayProps) {
   const [productType, setProductType] = React.useState('');
