@@ -11,6 +11,7 @@ import { formatBytes } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
+import { Logo } from '@/components/logo';
 
 type ProcessingMode = 'group' | 'individual';
 
@@ -178,6 +179,7 @@ export default function ImageEditorPage() {
                   onChange={(e) => handleFileChange(e.target.files)}
                   className="hidden"
                 />
+                <Logo className="h-16 w-16 mb-4" />
                 <Upload className="w-12 h-12 text-muted-foreground" />
                 <p className="mt-4 text-lg font-semibold">Arraste e solte, cole, ou clique para selecionar</p>
                 <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
