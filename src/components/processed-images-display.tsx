@@ -109,7 +109,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
           <CardTitle>{imageSet.originalFileName}</CardTitle>
           <CardDescription>Selecione o tipo de produto para gerar o conteúdo. Favorite uma imagem para o site para criar a versão do ERP.</CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8">
+        <CardContent>
           <div className='space-y-6'>
             {/* AI Content Generation */}
             <div className="space-y-4">
@@ -175,68 +175,66 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                 )}
             </div>
           </div>
-          <div className="space-y-6">
-              {/* ERP Image */}
-              <div>
-                <Label>Imagem Principal (ERP - 2000x2000)</Label>
-                  <div className="mt-2 aspect-square w-full">
-                      {isErpLoading ? (
-                          <div className="w-full h-full flex items-center justify-center bg-muted/50 rounded-lg border">
-                            <Loader2 className="w-12 h-12 text-primary animate-spin" />
-                          </div>
-                      ) : erpImage ? (
-                          <div className="relative group w-full h-full">
-                              <Image
-                              src={erpImage.dataUrl}
-                              alt="Imagem principal para ERP"
-                              width={2000}
-                              height={2000}
-                              className="rounded-lg border object-cover w-full h-full"
-                              />
-                              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                                  <Button size="sm" onClick={() => handleDownload(erpImage.dataUrl, erpImage.fileName)}>
-                                      <Download className="mr-2 h-4 w-4"/>
-                                      Baixar
-                                  </Button>
-                              </div>
-                          </div>
-                      ) : (
-                         <div className="w-full h-full flex items-center justify-center bg-muted/30 rounded-lg border border-dashed">
-                            <p className="text-muted-foreground text-center p-4">Favorite uma imagem para gerar a versão do ERP.</p>
-                         </div>
-                      )}
-                  </div>
-              </div>
-          </div>
         </CardContent>
-        <CardFooter className="flex-col items-start bg-secondary/30">
-          {/* Website Images */}
-          <div className='p-6'>
-              <Label>Imagens para o Site (1300x2000)</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-2">
-                  {websiteImages.map((img, idx) => (
-                  <div key={idx} className="relative group">
-                      <Image
-                      src={img.dataUrl}
-                      alt={`Imagem para o site ${img.width}x${img.height}`}
-                      width={img.width}
-                      height={img.height}
-                      className="rounded-lg border aspect-[130/200] object-cover"
-                      data-ai-hint="fashion product"
-                      />
-                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                          <Button size="sm" onClick={() => handleDownload(img.dataUrl, img.fileName)}>
-                              <Download className="mr-2 h-4 w-4"/>
-                              Baixar
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => handleFavoriteClick(img.originalFileIndex)} className="text-white hover:text-amber-400">
-                             <Star className={cn("h-6 w-6", favoritedImageIndex === img.originalFileIndex ? 'text-amber-400 fill-amber-400' : 'text-white')} />
-                          </Button>
-                      </div>
-                  </div>
-                  ))}
-              </div>
-          </div>
+        <CardFooter className="flex-col items-start bg-secondary/30 p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                <div className="space-y-2">
+                    <Label>Imagem Principal (ERP - 2000x2000)</Label>
+                    <div className="aspect-square w-full">
+                        {isErpLoading ? (
+                            <div className="w-full h-full flex items-center justify-center bg-muted/50 rounded-lg border">
+                                <Loader2 className="w-12 h-12 text-primary animate-spin" />
+                            </div>
+                        ) : erpImage ? (
+                            <div className="relative group w-full h-full">
+                                <Image
+                                src={erpImage.dataUrl}
+                                alt="Imagem principal para ERP"
+                                width={2000}
+                                height={2000}
+                                className="rounded-lg border object-cover w-full h-full"
+                                />
+                                <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                                    <Button size="sm" onClick={() => handleDownload(erpImage.dataUrl, erpImage.fileName)}>
+                                        <Download className="mr-2 h-4 w-4"/>
+                                        Baixar
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-muted/30 rounded-lg border border-dashed">
+                                <p className="text-muted-foreground text-center p-4">Favorite uma imagem para gerar a versão do ERP.</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className='space-y-2'>
+                    <Label>Imagens para o Site (1300x2000)</Label>
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {websiteImages.map((img, idx) => (
+                        <div key={idx} className="relative group">
+                            <Image
+                            src={img.dataUrl}
+                            alt={`Imagem para o site ${img.width}x${img.height}`}
+                            width={img.width}
+                            height={img.height}
+                            className="rounded-lg border aspect-[130/200] object-cover"
+                            data-ai-hint="fashion product"
+                            />
+                            <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                                <Button size="sm" onClick={() => handleDownload(img.dataUrl, img.fileName)}>
+                                    <Download className="mr-2 h-4 w-4"/>
+                                    Baixar
+                                </Button>
+                                <Button size="icon" variant="ghost" onClick={() => handleFavoriteClick(img.originalFileIndex)} className="text-white hover:text-amber-400">
+                                <Star className={cn("h-6 w-6", favoritedImageIndex === img.originalFileIndex ? 'text-amber-400 fill-amber-400' : 'text-white')} />
+                                </Button>
+                            </div>
+                        </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </CardFooter>
       </Card>
     );
