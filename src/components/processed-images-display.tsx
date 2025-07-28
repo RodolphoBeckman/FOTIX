@@ -46,7 +46,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     setIsLoading(true);
     setGeneratedContent(null);
     try {
-      const filesForAI = imageSet.originalFiles;
+      const filesForAI = favoritedImageIndex !== null ? [imageSet.originalFiles[favoritedImageIndex]] : imageSet.originalFiles;
       const imageUrls = await getCompressedImageUris(filesForAI);
       const result = await generateProductInfo({
         imageUrls,
@@ -100,10 +100,6 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     document.body.removeChild(link);
   }
 
-  const websiteImage = imageSet.images.find(img => img.width === 1300 && img.height === 2000);
-  const erpImageForIndividual = imageSet.images.find(img => img.width === 2000 && img.height === 2000);
-
-
   // Group View
   if (isGroup) {
     const websiteImages = imageSet.images.filter(img => img.width === 1300 && img.height === 2000);
@@ -113,7 +109,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
           <CardTitle>{imageSet.originalFileName}</CardTitle>
           <CardDescription>Selecione o tipo de produto para gerar o conteúdo. Favorite uma imagem para o site para criar a versão do ERP.</CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <CardContent className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8">
           <div className='space-y-6'>
             {/* AI Content Generation */}
             <div className="space-y-4">
@@ -155,14 +151,14 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label htmlFor="gen-title">Título Gerado</Label>
                         <div className="flex items-center gap-2">
-                        <Input id="gen-title" value={generatedContent.title} readOnly />
+                        <Input id="gen-title" value={generatedContent.title} readOnly className="text-base" />
                         <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
                         <Label htmlFor="gen-desc">Descrição Gerada</Label>
                         <div className="flex items-start gap-2">
-                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={5} />
+                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={6} className="text-base" />
                             <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
@@ -249,41 +245,32 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
   // Individual View
   return (
     <Card className="overflow-hidden animate-in fade-in-0">
-        <CardContent className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 p-4">
+        <CardContent className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  {websiteImage && (
+                 <div className="relative">
                     <Image 
-                      src={websiteImage.dataUrl}
+                      src={imageSet.images.find(img => img.width === 1300)!.dataUrl}
                       alt={imageSet.originalFileName}
-                      width={80}
-                      height={123}
+                      width={130}
+                      height={200}
                       className="rounded-md border object-cover aspect-[130/200]"
                       data-ai-hint="fashion product"
                     />
-                  )}
-                  <div>
-                    <CardTitle className="text-base font-semibold">{imageSet.originalFileName}</CardTitle>
-                     <div className="flex gap-2 mt-2">
-                       {websiteImage && (
-                         <Button size="sm" variant="outline" onClick={() => handleDownload(websiteImage.dataUrl, websiteImage.fileName)}>
-                           <MonitorSmartphone className="mr-2 h-4 w-4" /> Site
-                         </Button>
-                       )}
-                       {erpImageForIndividual && (
-                         <Button size="sm" variant="outline" onClick={() => handleDownload(erpImageForIndividual.dataUrl, erpImageForIndividual.fileName)}>
-                           <ImageIcon className="mr-2 h-4 w-4" /> ERP
-                         </Button>
-                       )}
-                     </div>
-                  </div>
-                </div>
+                 </div>
+                 <div className="flex flex-col gap-2">
+                   <Button size="sm" variant="outline" onClick={() => handleDownload(imageSet.images.find(img => img.width === 1300)!.dataUrl, imageSet.images.find(img => img.width === 1300)!.fileName)}>
+                     <MonitorSmartphone className="mr-2 h-4 w-4" /> Site
+                   </Button>
+                   <Button size="sm" variant="outline" onClick={() => handleDownload(imageSet.images.find(img => img.width === 2000)!.dataUrl, imageSet.images.find(img => img.width === 2000)!.fileName)}>
+                     <ImageIcon className="mr-2 h-4 w-4" /> ERP
+                   </Button>
+                 </div>
             </div>
             
             <div className="flex flex-col gap-4">
               <div className="flex items-end gap-2">
                   <div className="flex-grow">
-                    <Label htmlFor={`product-type-${imageSet.originalFileName}`} className="text-xs">Tipo de Produto</Label>
+                    <Label htmlFor={`product-type-${imageSet.originalFileName}`} className="text-xs">{imageSet.originalFileName}</Label>
                     <Select value={productType} onValueChange={setProductType}>
                         <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
                           <SelectValue placeholder="Selecione um tipo..." />
