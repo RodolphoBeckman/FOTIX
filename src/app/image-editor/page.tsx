@@ -225,7 +225,11 @@ export default function ImageEditorPage() {
                     </div>
 
                     <Button onClick={handleProcessClick} disabled={isProcessing} size="lg">
-                      {isProcessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileText className="mr-2 h-4 w-4" />}
+                      {isProcessing ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <FileText className="mr-2 h-4 w-4" />
+                      )}
                       Processar {files.length} Imagem{files.length > 1 ? 'ns' : ''}
                     </Button>
                   </div>
