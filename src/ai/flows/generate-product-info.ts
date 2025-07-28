@@ -48,7 +48,7 @@ Product Details: {{{productDetails}}}
 Instruções:
 - Título: Crie um título curto, objetivo e atrativo que inclua o nome do produto e uma característica principal (ex: "Camisa de Linho Azul Marinho" ou "Vestido Midi Floral com Babados").
 - Descrição: Escreva uma descrição persuasiva e detalhada. Destaque o tecido, a modelagem, os detalhes (botões, gola, etc.), e sugira ocasiões de uso. Use uma linguagem que inspire a cliente a se imaginar usando a peça.
-- Tags: Gere tags relevantes e abrangentes, incluindo variações de nome, cor, tecido, estilo e ocasiões.
+- Tags: Gere tags relevantes e abrangentes, incluindo variações de nome, cor, tecido, estilo e ocasiões. As tags não devem conter espaços (por exemplo, use 'camisadelinho' em vez de 'camisa de linho').
 `,
   model: 'googleai/gemini-1.5-flash',
   config: {
