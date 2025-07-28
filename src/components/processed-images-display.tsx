@@ -27,7 +27,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
   const [productType, setProductType] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [generatedContent, setGeneratedContent] = React.useState<GenerateProductInfoOutput | null>(null);
-  const [favoritedImageIndex, setFavoritedImageIndex] = React.useState<number | null>(isGroup || imageSet.images.length === 1 ? 0 : null);
+  const [favoritedImageIndex, setFavoritedImageIndex] = React.useState<number | null>(null);
   const [erpImage, setErpImage] = React.useState<ProcessedImage | null>(null);
   const [isErpLoading, setIsErpLoading] = React.useState(false);
 
@@ -68,7 +68,6 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
   };
 
   const handleFavoriteClick = async (index: number) => {
-    if (favoritedImageIndex === index) return;
     setFavoritedImageIndex(index);
     setIsErpLoading(true);
     setErpImage(null);
@@ -87,14 +86,6 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
         setIsErpLoading(false);
     }
   };
-
-  // Generate the first ERP image on mount for group mode or single image
-  React.useEffect(() => {
-    if ((isGroup || imageSet.originalFiles.length === 1) && imageSet.originalFiles.length > 0 && favoritedImageIndex !== null) {
-      handleFavoriteClick(favoritedImageIndex);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
