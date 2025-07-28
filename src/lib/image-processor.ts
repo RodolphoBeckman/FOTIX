@@ -3,14 +3,16 @@ export interface ProcessedImage {
   dataUrl: string;
   width: number;
   height: number;
+  originalFileIndex: number;
 }
 
 export type ProcessedImageSet = {
   originalFileName: string;
+  originalFiles: File[];
   images: ProcessedImage[];
 };
 
-async function createImageTask(file: File, width: number, height: number): Promise<ProcessedImage> {
+export async function createImageTask(file: File, width: number, height: number, originalFileIndex: number): Promise<ProcessedImage> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -37,7 +39,7 @@ async function createImageTask(file: File, width: number, height: number): Promi
         ctx.drawImage(img, fgX, fgY, img.width * fgScale, img.height * fgScale);
 
         const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-        resolve({ fileName: `processed_${width}x${height}_${file.name}`, dataUrl, width, height });
+        resolve({ fileName: `processed_${width}x${height}_${file.name}`, dataUrl, width, height, originalFileIndex });
       };
       img.onerror = reject;
       img.src = e.target?.result as string;
@@ -51,11 +53,12 @@ export async function processImages(
   files: File[], 
   dimensions: { width: number; height: number }[]
 ): Promise<ProcessedImageSet[]> {
-    const allProcessedTasks = files.map(async (file) => {
-        const processingTasks = dimensions.map(dim => createImageTask(file, dim.width, dim.height));
+    const allProcessedTasks = files.map(async (file, index) => {
+        const processingTasks = dimensions.map(dim => createImageTask(file, dim.width, dim.height, index));
         const processedImages = await Promise.all(processingTasks);
         return {
             originalFileName: file.name,
+            originalFiles: [file],
             images: processedImages,
         };
     });

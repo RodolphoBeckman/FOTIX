@@ -117,21 +117,23 @@ export default function ImageEditorPage() {
     setIsProcessing(true);
     setProcessedSets([]);
     try {
-      const dimensions = [
-        { width: 2000, height: 2000 },
-        { width: 1300, height: 2000 },
-      ];
+      // Initially process only for the website format
+      const dimensions = [{ width: 1300, height: 2000 }];
       const results = await processImages(files, dimensions);
 
       if (processingMode === 'group') {
           const allProcessedImages = results.flatMap(set => set.images);
           const groupSet: ProcessedImageSet = {
               originalFileName: 'Grupo de Produtos',
+              originalFiles: files,
               images: allProcessedImages,
           };
           setProcessedSets([groupSet]);
       } else {
-          setProcessedSets(results);
+          setProcessedSets(results.map((set, index) => ({
+              ...set,
+              originalFiles: [files[index]]
+          })));
       }
       
     } catch (error) {
@@ -155,9 +157,9 @@ export default function ImageEditorPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-7xl">
         {processedSets.length === 0 ? (
-          <div className="space-y-6">
+          <div className="space-y-6 max-w-5xl mx-auto">
             <Card
               onDragEnter={handleDragEvents}
               onDragOver={handleDragEvents}
@@ -235,7 +237,7 @@ export default function ImageEditorPage() {
                     <ProcessedImagesDisplay 
                         key={processingMode === 'group' ? 'group-set' : set.originalFileName}
                         imageSet={set} 
-                        filesForAI={processingMode === 'group' ? files : [files[index]]}
+                        isGroup={processingMode === 'group'}
                     />
                 ))}
             </div>
