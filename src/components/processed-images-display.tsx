@@ -177,10 +177,10 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
           </div>
         </CardContent>
         <CardFooter className="flex-col items-start bg-secondary/30 p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full items-start">
                 <div className="space-y-2">
                     <Label>Imagem Principal (ERP - 2000x2000)</Label>
-                    <div className="aspect-square w-full">
+                     <div className="aspect-[130/200] w-full">
                         {isErpLoading ? (
                             <div className="w-full h-full flex items-center justify-center bg-muted/50 rounded-lg border">
                                 <Loader2 className="w-12 h-12 text-primary animate-spin" />
@@ -192,7 +192,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                                 alt="Imagem principal para ERP"
                                 width={2000}
                                 height={2000}
-                                className="rounded-lg border object-cover w-full h-full"
+                                className="rounded-lg border object-contain w-full h-full"
                                 />
                                 <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                                     <Button size="sm" onClick={() => handleDownload(erpImage.dataUrl, erpImage.fileName)}>
