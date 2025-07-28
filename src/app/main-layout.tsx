@@ -79,8 +79,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "hover:text-foreground",
-                     pathname === item.href ? "text-foreground" : "text-muted-foreground"
+                    "flex items-center gap-4 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    pathname === item.href && "bg-muted text-primary"
                   )}
                 >
                   <item.icon className="h-5 w-5" />
@@ -97,9 +97,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">{children}</main>
        <footer className="border-t py-6 md:px-8 md:py-0">
           <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
-            <p className="text-center text-sm leading-loose text-muted-foreground">
-              Construído com Next.js, Genkit e ShadCN UI.
-            </p>
+            <div className="flex items-center gap-2 text-muted-foreground">
+               <Logo className="h-5 w-5" />
+               <p className="text-center text-sm leading-loose">
+                 Construído com Next.js, Genkit e ShadCN UI.
+               </p>
+            </div>
           </div>
         </footer>
     </div>
