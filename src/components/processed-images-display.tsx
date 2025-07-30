@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Image from 'next/image';
+import JSZip from 'jszip';
 import { generateProductInfo, GenerateProductInfoOutput } from '@/ai/flows/generate-product-info';
 import { getCompressedImageUris, createImageTask, ProcessedImageSet, ProcessedImage } from '@/lib/image-processor';
 import { useToast } from '@/hooks/use-toast';
@@ -12,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { Loader2, Sparkles, Copy, Download, Star, Image as ImageIcon, MonitorSmartphone } from 'lucide-react';
+import { Loader2, Sparkles, Copy, Download, Star, Image as ImageIcon, MonitorSmartphone, Archive } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { cn, formatBytes } from '@/lib/utils';
 
@@ -100,9 +101,38 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     document.body.removeChild(link);
   }
 
+  const handleDownloadAll = async () => {
+    const zip = new JSZip();
+    const imagesToZip = [...imageSet.images];
+    if (erpImage) {
+        imagesToZip.push(erpImage);
+    }
+
+    if (imagesToZip.length === 0) {
+        toast({ variant: 'destructive', title: 'Nenhuma imagem para baixar' });
+        return;
+    }
+
+    imagesToZip.forEach(img => {
+        const base64Data = img.dataUrl.split(',')[1];
+        zip.file(img.fileName, base64Data, { base64: true });
+    });
+
+    const content = await zip.generateAsync({ type: 'blob' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(content);
+    link.download = `Fotix_${productType || 'Imagens'}.zip`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+  };
+
   // Group View
   if (isGroup) {
     const websiteImages = imageSet.images.filter(img => img.width === 1300 && img.height === 2000);
+    const allImages = erpImage ? [erpImage, ...websiteImages] : websiteImages;
+
     return (
       <Card className="overflow-hidden animate-in fade-in-0">
         <CardHeader>
@@ -178,57 +208,51 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
         </CardContent>
         <CardFooter className="flex-col items-start bg-secondary/30 p-6">
            <div className="w-full space-y-4">
-                <Label>Imagens Geradas</Label>
+                <div className="flex justify-between items-center w-full">
+                    <Label>Imagens Geradas</Label>
+                    {(erpImage || websiteImages.length > 0) && (
+                        <Button variant="outline" size="sm" onClick={handleDownloadAll}>
+                            <Archive className="mr-2 h-4 w-4" />
+                            Baixar Todas
+                        </Button>
+                    )}
+                </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {isErpLoading && (
                          <div className="aspect-[130/200] w-full flex flex-col items-center justify-center bg-muted/50 rounded-lg border">
                             <Loader2 className="w-12 h-12 text-primary animate-spin" />
                          </div>
                     )}
-                    {erpImage && (
-                        <div className="relative group">
-                            <div className='text-center mb-2'>
-                                <p className="text-xs text-muted-foreground font-semibold">ERP (2000x2000)</p>
-                                <p className='text-[10px] text-muted-foreground/80'>{formatBytes(erpImage.sizeInBytes)}</p>
-                            </div>
-                            <Image
-                                src={erpImage.dataUrl}
-                                alt="Imagem principal para ERP"
-                                width={2000}
-                                height={2000}
-                                className="rounded-lg border object-contain w-full aspect-[130/200]"
-                            />
-                            <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                                <Button size="sm" onClick={() => handleDownload(erpImage.dataUrl, erpImage.fileName)}>
-                                    <Download className="mr-2 h-4 w-4"/>
-                                    Baixar
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-
-                    {websiteImages.map((img, idx) => (
+                    
+                    {allImages.map((img, idx) => (
                     <div key={idx} className="relative group">
                         <div className='text-center mb-2'>
-                             <p className="text-xs text-muted-foreground font-semibold">Site ({img.width}x{img.height})</p>
+                             <p className="text-xs text-muted-foreground font-semibold">
+                                {img.width === 2000 ? `ERP (${img.width}x${img.height})` : `Site (${img.width}x${img.height})`}
+                            </p>
                              <p className='text-[10px] text-muted-foreground/80'>{formatBytes(img.sizeInBytes)}</p>
                         </div>
                         <Image
-                        src={img.dataUrl}
-                        alt={`Imagem para o site ${img.width}x${img.height}`}
-                        width={img.width}
-                        height={img.height}
-                        className="rounded-lg border aspect-[130/200] object-cover"
-                        data-ai-hint="fashion product"
+                            src={img.dataUrl}
+                            alt={`Imagem processada ${img.width}x${img.height}`}
+                            width={img.width}
+                            height={img.height}
+                            className={cn(
+                                "rounded-lg border aspect-[130/200]",
+                                img.width === 2000 ? 'object-contain' : 'object-cover'
+                            )}
+                            data-ai-hint="fashion product"
                         />
                         <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                             <Button size="sm" onClick={() => handleDownload(img.dataUrl, img.fileName)}>
                                 <Download className="mr-2 h-4 w-4"/>
                                 Baixar
                             </Button>
-                            <Button size="icon" variant="ghost" onClick={() => handleFavoriteClick(img.originalFileIndex)} className="text-white hover:text-amber-400">
-                            <Star className={cn("h-6 w-6", favoritedImageIndex === img.originalFileIndex ? 'text-amber-400 fill-amber-400' : 'text-white')} />
-                            </Button>
+                            {img.width !== 2000 && (
+                                <Button size="icon" variant="ghost" onClick={() => handleFavoriteClick(img.originalFileIndex)} className="text-white hover:text-amber-400">
+                                    <Star className={cn("h-6 w-6", favoritedImageIndex === img.originalFileIndex ? 'text-amber-400 fill-amber-400' : 'text-white')} />
+                                </Button>
+                            )}
                         </div>
                     </div>
                     ))}
