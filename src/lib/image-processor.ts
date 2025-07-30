@@ -82,10 +82,23 @@ export async function createImageTask(file: File, width: number, height: number,
         } else {
             // Blurred background logic for other sizes (e.g., 2000x2000)
             ctx.filter = 'blur(24px)';
-            const bgScale = Math.max(width / img.width, height / img.height);
-            const bgX = (width - img.width * bgScale) / 2;
-            const bgY = (height - img.height * bgScale) / 2;
-            ctx.drawImage(img, bgX, bgY, img.width * bgScale, img.height * bgScale);
+            const imageAspectRatio = img.width / img.height;
+            const canvasAspectRatio = width / height;
+
+            let bgWidth, bgHeight, bgX, bgY;
+
+            if (imageAspectRatio > canvasAspectRatio) {
+                bgHeight = height;
+                bgWidth = height * imageAspectRatio;
+                bgX = (width - bgWidth) / 2;
+                bgY = 0;
+            } else {
+                bgWidth = width;
+                bgHeight = width / imageAspectRatio;
+                bgX = 0;
+                bgY = (height - bgHeight) / 2;
+            }
+            ctx.drawImage(img, bgX, bgY, bgWidth, bgHeight);
             ctx.filter = 'none';
 
             // Draw centered image
