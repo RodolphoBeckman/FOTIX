@@ -54,7 +54,6 @@ Instruções Adicionais:
 - Descrição: Escreva uma descrição persuasiva e detalhada sobre o produto principal. Destaque o tecido, a modelagem, os detalhes (botões, gola, etc.), e sugira ocasiões de uso. Use uma linguagem que inspire a cliente a se imaginar usando a peça.
 - Tags: Gere tags relevantes e abrangentes para o produto principal, incluindo variações de nome, cor, tecido, estilo e ocasiões. As tags não devem conter espaços (por exemplo, use 'camisadelinho' em vez de 'camisa de linho').
 `,
-  model: 'googleai/gemini-pro',
   config: {
     safetySettings: [
       {
