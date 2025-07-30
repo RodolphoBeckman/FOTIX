@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import JSZip from 'jszip';
 import { generateProductInfo, GenerateProductInfoOutput } from '@/ai/flows/generate-product-info';
 import { getCompressedImageUris, createImageTask, ProcessedImageSet, ProcessedImage } from '@/lib/image-processor';
 import { useToast } from '@/hooks/use-toast';
@@ -101,31 +100,23 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     document.body.removeChild(link);
   }
 
-  const handleDownloadAll = async () => {
-    const zip = new JSZip();
-    const imagesToZip = [...imageSet.images];
+  const handleDownloadAll = () => {
+    const imagesToDownload = [...imageSet.images];
     if (erpImage) {
-        imagesToZip.push(erpImage);
+        imagesToDownload.unshift(erpImage);
     }
 
-    if (imagesToZip.length === 0) {
+    if (imagesToDownload.length === 0) {
         toast({ variant: 'destructive', title: 'Nenhuma imagem para baixar' });
         return;
     }
 
-    imagesToZip.forEach(img => {
-        const base64Data = img.dataUrl.split(',')[1];
-        zip.file(img.fileName, base64Data, { base64: true });
+    imagesToDownload.forEach((img, index) => {
+        // Add a small delay so the browser can handle multiple downloads
+        setTimeout(() => {
+          handleDownload(img.dataUrl, img.fileName);
+        }, index * 300);
     });
-
-    const content = await zip.generateAsync({ type: 'blob' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(content);
-    link.download = `Fotix_${productType || 'Imagens'}.zip`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
   };
 
   // Group View
