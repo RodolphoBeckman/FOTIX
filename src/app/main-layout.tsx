@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { Logo } from '@/components/logo';
-import { Image, Palette, PanelLeft } from 'lucide-react';
+import { Image, PanelLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
@@ -24,11 +24,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       label: 'Editor de Imagem',
       icon: Image,
     },
-    {
-      href: '/color-editor',
-      label: 'Editor de Cores',
-      icon: Palette,
-    }
   ];
 
   return (
