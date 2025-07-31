@@ -24,7 +24,7 @@ const GenerateProductInfoOutputSchema = z.object({
   title: z
     .string()
     .describe(
-      'SEO-optimized title. Max 60 characters. Format: [Product Name] [Main Feature] [Color/Material]. Example: "Saia Midi Plissada de Seda Pura Rosa"'
+      'SEO-optimized title. Max 60 characters. Format: [Product Name] [Main Feature]. Example: "Saia Midi Plissada de Seda". CRITICAL: NEVER include the product color in the title.'
     ),
   shortDescription: z
     .string()
