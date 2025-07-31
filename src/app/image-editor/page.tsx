@@ -182,7 +182,7 @@ export default function ImageEditorPage() {
                 className={cn(
                     'relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-colors duration-300',
                     'bg-card/50 border-2 border-dashed border-border hover:border-primary',
-                    'shadow-[0_0_20px_0] shadow-primary/10',
+                    'dark:shadow-[0_0_30px_-5px_hsl(var(--primary))]',
                     isDragging && 'border-primary bg-primary/10'
                 )}
             >

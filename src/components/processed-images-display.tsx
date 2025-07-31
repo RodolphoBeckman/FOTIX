@@ -133,7 +133,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     const allImages = erpImage ? [erpImage, ...websiteImages] : websiteImages;
 
     return (
-      <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm shadow-[0_0_20px_0] shadow-primary/10">
+      <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm dark:shadow-[0_0_30px_-10px_hsl(var(--primary))]">
         <CardHeader>
           <CardTitle className='font-headline'>Conteúdo do Produto</CardTitle>
           <CardDescription>Selecione o tipo de produto e use a imagem favoritada para gerar descrições com IA.</CardDescription>
@@ -262,7 +262,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
   // Individual View
   return (
-    <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm shadow-[0_0_20px_0] shadow-primary/10">
+    <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm dark:shadow-[0_0_20px_-5px_hsl(var(--primary))]">
         <CardContent className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             <div className="flex flex-col gap-4">
                  <div className="relative">

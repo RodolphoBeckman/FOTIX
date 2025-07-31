@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="pt" className={`${inter.variable} ${sourceCodePro.variable}`} suppressHydrationWarning>
       <head />
-      <body className="font-body antialiased bg-background">
+      <body className="font-body antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
