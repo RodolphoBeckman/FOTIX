@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Upload, X, Loader2, Sparkles, ScanSearch } from 'lucide-react';
+import { X, Loader2, Sparkles, ScanSearch } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
