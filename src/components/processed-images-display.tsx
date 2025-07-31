@@ -188,19 +188,19 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="gen-desc">Descrição Gerada</Label>
+                        <Label htmlFor="gen-desc">Descrição Longa</Label>
                         <div className="flex items-start gap-2">
-                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={6} className="text-base" />
-                            <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
+                            <Textarea id="gen-desc" value={generatedContent.longDescription} readOnly rows={6} className="text-base" />
+                            <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.longDescription)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
                         <Label>Tags Geradas</Label>
                         <div className="flex items-start gap-2">
                             <div className="p-3 border rounded-md w-full flex flex-wrap gap-2 min-h-[40px] border-border/20">
-                            {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
+                            {generatedContent.seoTags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
                             </div>
-                            <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>
+                            <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.seoTags.join(', '))}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     </div>
@@ -327,17 +327,17 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label htmlFor="gen-desc">Descrição</Label>
                         <div className="flex items-start gap-2">
-                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={3} className="text-xs" />
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
+                            <Textarea id="gen-desc" value={generatedContent.longDescription} readOnly rows={3} className="text-xs" />
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.longDescription)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
                         <Label>Tags</Label>
                         <div className="flex items-start gap-2">
                             <div className="p-2 border rounded-md w-full flex flex-wrap gap-1 min-h-[32px] border-border/20">
-                              {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
+                              {generatedContent.seoTags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
                             </div>
-                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.seoTags.join(', '))}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                   </div>
