@@ -34,7 +34,7 @@ const GenerateProductInfoOutputSchema = z.object({
   longDescription: z
     .string()
     .describe(
-      'A complete and persuasive HTML description. Start with an inspiring paragraph, followed by a `<ul>` list of 3-5 key features (material, fit, details). End with styling suggestions.'
+      'A complete and persuasive HTML description. Start with an inspiring paragraph, followed by an HTML `<ul>` list of 3-5 key features (material, fit, details). End with styling suggestions.'
     ),
   toneOfVoice: z
     .string()
