@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: 'Fotix',
   description: 'Kit de ferramentas com IA para criação de conteúdo de e-commerce de moda.',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 export default function RootLayout({
