@@ -21,9 +21,36 @@ const GenerateProductInfoInputSchema = z.object({
 export type GenerateProductInfoInput = z.infer<typeof GenerateProductInfoInputSchema>;
 
 const GenerateProductInfoOutputSchema = z.object({
-  title: z.string().describe('The SEO-optimized title for the product.'),
-  description: z.string().describe('The SEO-optimized description for the product.'),
-  tags: z.array(z.string()).describe('The SEO-optimized tags for the product.'),
+  title: z
+    .string()
+    .describe(
+      'SEO-optimized title. Max 60 characters. Format: [Product Name] [Main Feature] [Color/Material]. Example: "Saia Midi Plissada de Seda Pura Rosa"'
+    ),
+  shortDescription: z
+    .string()
+    .describe(
+      'A captivating subtitle for product listings. Max 120 characters. Highlight a key benefit or style point.'
+    ),
+  longDescription: z
+    .string()
+    .describe(
+      'A complete and persuasive HTML description. Start with an inspiring paragraph, followed by a `<ul>` list of 3-5 key features (material, fit, details). End with styling suggestions.'
+    ),
+  toneOfVoice: z
+    .string()
+    .describe(
+      'The tone of voice used in the description (e.g., "Sofisticado e Elegante", "Moderno e Despojado").'
+    ),
+  targetAudience: z
+    .string()
+    .describe(
+      'A brief description of the ideal customer for this product (e.g., "Mulher moderna que valoriza peças atemporais e de alta qualidade.").'
+    ),
+  seoTags: z
+    .array(z.string())
+    .describe(
+      'A list of relevant, comprehensive SEO tags. Must not contain spaces (e.g., use "saiamidi" instead of "saia midi").'
+    ),
 });
 export type GenerateProductInfoOutput = z.infer<typeof GenerateProductInfoOutputSchema>;
 
@@ -35,25 +62,28 @@ const generateProductInfoPrompt = ai.definePrompt({
   name: 'generateProductInfoPrompt',
   input: { schema: GenerateProductInfoInputSchema },
   output: { schema: GenerateProductInfoOutputSchema },
-  prompt: `Você é um especialista em SEO e copywriter para e-commerce de moda.
+  prompt: `
+      ## ROLE & GOAL ##
+      You are "Athena", the AI Marketing Director for a luxury online fashion brand. Your goal is to create compelling, sophisticated, and SEO-optimized product content that not only describes the item but also inspires desire and drives sales. You write in flawless Brazilian Portuguese.
 
-Sua tarefa é criar um título, uma descrição e tags otimizadas para o produto a seguir.
+      ## CRITICAL INSTRUCTIONS ##
+      1.  **Focus on the Primary Product**: Your entire analysis and output MUST be based on the \`productType\` provided by the user. If the image shows a full outfit, but the \`productType\` is "Saia" (Skirt), you will ignore the blouse, shoes, and any other accessories. Your description, title, and all other fields must be exclusively about the skirt. This is the most important rule.
+      2.  **Image Analysis**: Use the provided images to extract key visual attributes of the PRIMARY PRODUCT ONLY. Analyze:
+          *   **Material & Texture**: What does the fabric look like? (e.g., seda, linho, algodão, plissado, malha, couro).
+          *   **Style & Cut**: What is the silhouette? (e.g., midi, longo, evasê, reto, justo, envelope).
+          *   **Color & Pattern**: Be specific with colors. (e.g., "azul-marinho profundo", "rosa-quartzo", "estampa floral liberty").
+          *   **Unique Details**: Note any special features. (e.g., "botões de madrepérola", "gola assimétrica", "fenda lateral sutil").
+      3.  **Content Generation**: Based on your analysis, generate the content following the output schema precisely.
 
-**Instrução Crítica: O Tipo de Produto informado pelo usuário é a fonte primária da verdade. Foque sua descrição e título exclusivamente neste tipo de produto, mesmo que a imagem contenha outros itens (como um look completo). Por exemplo, se o tipo de produto for "Saia", você deve ignorar a blusa e quaisquer outros acessórios na imagem e descrever apenas a saia.**
+      ## CONTEXT ##
+      {{#each imageUrls}}
+      Image of the product: {{media url=this}}
+      {{/each}}
+      - **Primary Product Type**: {{{productType}}}
+      - **Additional Details**: {{{productDetails}}}
 
-Use as imagens para extrair atributos do produto principal, como cor, estilo, tecido, corte e detalhes da peça.
-
-{{#each imageUrls}}
-Image: {{media url=this}}
-{{/each}}
-Product Type: {{{productType}}}
-Product Details: {{{productDetails}}}
-
-Instruções Adicionais:
-- Título: Crie um título curto, objetivo e atrativo que inclua o nome do produto (conforme o Tipo de Produto) e uma característica principal (ex: "Saia Midi Plissada Rosa" ou "Camisa de Linho Azul Marinho").
-- Descrição: Escreva uma descrição persuasiva e detalhada sobre o produto principal. Destaque o tecido, a modelagem, os detalhes (botões, gola, etc.), e sugira ocasiões de uso. Use uma linguagem que inspire a cliente a se imaginar usando a peça.
-- Tags: Gere tags relevantes e abrangentes para o produto principal, incluindo variações de nome, cor, tecido, estilo e ocasiões. As tags não devem conter espaços (por exemplo, use 'camisadelinho' em vez de 'camisa de linho').
-`,
+      Now, embody the persona of "Athena" and generate the complete product content.
+      `,
   config: {
     safetySettings: [
       {
