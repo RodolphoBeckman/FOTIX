@@ -9,7 +9,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Loader2, Sparkles, Copy, Download, Star, Image as ImageIcon, MonitorSmartphone, Archive } from 'lucide-react';
@@ -99,7 +98,13 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
   };
 
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
+    // Create a temporary element to hold the HTML content
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text;
+    // Get the plain text from the element
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    
+    navigator.clipboard.writeText(plainText);
     toast({ title: 'Copiado para a área de transferência!' });
   };
   
@@ -190,7 +195,11 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label htmlFor="gen-desc">Descrição Longa</Label>
                         <div className="flex items-start gap-2">
-                            <Textarea id="gen-desc" value={generatedContent.longDescription} readOnly rows={6} className="text-base" />
+                            <div
+                              id="gen-desc"
+                              className="prose prose-sm dark:prose-invert min-h-[140px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background"
+                              dangerouslySetInnerHTML={{ __html: generatedContent.longDescription }}
+                            />
                             <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.longDescription)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
@@ -318,16 +327,20 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
               {generatedContent && (
                   <div className="space-y-2 pt-2 animate-in fade-in-0 duration-500 text-xs">
                     <div>
-                        <Label htmlFor="gen-title">Título</Label>
+                        <Label htmlFor="gen-title-individual">Título</Label>
                         <div className="flex items-center gap-2">
-                          <Input id="gen-title" value={generatedContent.title} readOnly className="h-8 text-xs font-headline" />
+                          <Input id="gen-title-individual" value={generatedContent.title} readOnly className="h-8 text-xs font-headline" />
                           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="gen-desc">Descrição</Label>
+                        <Label htmlFor="gen-desc-individual">Descrição</Label>
                         <div className="flex items-start gap-2">
-                            <Textarea id="gen-desc" value={generatedContent.longDescription} readOnly rows={3} className="text-xs" />
+                             <div
+                              id="gen-desc-individual"
+                              className="prose prose-sm dark:prose-invert min-h-[70px] w-full rounded-md border border-input bg-background px-3 py-2 text-xs ring-offset-background"
+                              dangerouslySetInnerHTML={{ __html: generatedContent.longDescription }}
+                            />
                             <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.longDescription)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
@@ -347,3 +360,5 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     </Card>
   );
 }
+
+    
