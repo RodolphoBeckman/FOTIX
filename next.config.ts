@@ -31,10 +31,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  serverExternalPackages: [
-    '@genkit-ai/core',
-    '@opentelemetry/sdk-node',
-  ],
 };
 
 export default nextConfig;
