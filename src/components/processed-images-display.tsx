@@ -133,9 +133,9 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     const allImages = erpImage ? [erpImage, ...websiteImages] : websiteImages;
 
     return (
-      <Card className="overflow-hidden animate-in fade-in-0">
+      <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm shadow-[0_0_20px_0] shadow-primary/10">
         <CardHeader>
-          <CardTitle>Conteúdo do Produto</CardTitle>
+          <CardTitle className='font-headline'>Conteúdo do Produto</CardTitle>
           <CardDescription>Selecione o tipo de produto e use a imagem favoritada para gerar descrições com IA.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -178,7 +178,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label htmlFor="gen-title">Título Gerado</Label>
                         <div className="flex items-center gap-2">
-                        <Input id="gen-title" value={generatedContent.title} readOnly className="text-base" />
+                        <Input id="gen-title" value={generatedContent.title} readOnly className="text-base font-headline" />
                         <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
@@ -205,7 +205,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
         <CardFooter className="flex-col items-start bg-secondary/30 p-6 mt-6">
            <div className="w-full space-y-4">
                 <div className="flex justify-between items-center w-full">
-                    <Label className="text-lg font-semibold">Imagens Geradas</Label>
+                    <Label className="text-lg font-semibold font-headline">Imagens Geradas</Label>
                     {(erpImage || websiteImages.length > 0) && (
                         <Button variant="outline" size="sm" onClick={handleDownloadAll}>
                             <Archive className="mr-2 h-4 w-4" />
@@ -223,7 +223,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     {allImages.map((img, idx) => (
                     <div key={idx} className="relative group">
                         <div className='text-center mb-2'>
-                             <p className="font-semibold text-sm text-foreground">
+                             <p className="font-semibold font-headline text-sm text-foreground">
                                 {img.width === 2000 ? `ERP (${img.width}x${img.height})` : `Site (${img.width}x${img.height})`}
                             </p>
                              <p className='text-xs text-muted-foreground'>{formatBytes(img.sizeInBytes)}</p>
@@ -262,7 +262,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
   // Individual View
   return (
-    <Card className="overflow-hidden animate-in fade-in-0">
+    <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm shadow-[0_0_20px_0] shadow-primary/10">
         <CardContent className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             <div className="flex flex-col gap-4">
                  <div className="relative">
@@ -315,7 +315,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label htmlFor="gen-title">Título</Label>
                         <div className="flex items-center gap-2">
-                          <Input id="gen-title" value={generatedContent.title} readOnly className="h-8 text-xs" />
+                          <Input id="gen-title" value={generatedContent.title} readOnly className="h-8 text-xs font-headline" />
                           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>

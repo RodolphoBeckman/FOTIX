@@ -166,7 +166,7 @@ export default function ImageEditorPage() {
             <div className="flex flex-col items-center justify-center gap-2 mb-8 text-center">
                 <div className='flex items-center gap-4'>
                     <Logo className="h-12 w-12"/>
-                    <h1 className="text-5xl font-bold tracking-tight">Fotix</h1>
+                    <h1 className="text-5xl font-headline font-bold tracking-tight">Fotix</h1>
                 </div>
                 <p className="text-muted-foreground text-lg mt-2">
                     Crie conteúdo de alta qualidade para o seu e-commerce com o poder da IA.
@@ -182,6 +182,7 @@ export default function ImageEditorPage() {
                 className={cn(
                     'relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-colors duration-300',
                     'bg-card/50 border-2 border-dashed border-border hover:border-primary',
+                    'shadow-[0_0_20px_0] shadow-primary/10',
                     isDragging && 'border-primary bg-primary/10'
                 )}
             >
@@ -203,7 +204,7 @@ export default function ImageEditorPage() {
             </div>
             
             {files.length > 0 && (
-              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500">
+              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500 bg-card/80 backdrop-blur-sm">
                  <CardHeader>
                     <CardTitle>Arquivos em Fila</CardTitle>
                     <CardDescription>Revise as imagens selecionadas e escolha o modo de processamento.</CardDescription>
@@ -259,7 +260,7 @@ export default function ImageEditorPage() {
         ) : (
             <div className="space-y-8">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-3xl font-bold">Resultados</h2>
+                    <h2 className="text-3xl font-bold font-headline">Resultados</h2>
                     <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>
                 </div>
                 <div className="space-y-4">
