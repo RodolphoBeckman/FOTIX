@@ -4,47 +4,47 @@
 
 @layer base {
   :root {
-    --background: 221 83% 5%;
-    --foreground: 210 40% 98%;
-    --card: 222 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 221 83% 63%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 221 83% 43%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 221 83% 53%;
+    --background: 30 56% 95%; /* Light Peach */
+    --foreground: 24 5% 15%; /* Dark Gray */
+    --card: 30 33% 90%;
+    --card-foreground: 24 5% 15%;
+    --popover: 30 56% 95%;
+    --popover-foreground: 24 5% 15%;
+    --primary: 16 100% 66%; /* Vibrant Coral */
+    --primary-foreground: 24 5% 15%;
+    --secondary: 30 20% 88%;
+    --secondary-foreground: 24 5% 15%;
+    --muted: 30 20% 88%;
+    --muted-foreground: 24 5% 35%;
+    --accent: 197 71% 73%; /* Sky Blue */
+    --accent-foreground: 24 5% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 20% 80%;
+    --input: 30 20% 85%;
+    --ring: 16 100% 66%;
   }
  
-  .light {
-    --background: 0 0% 98%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+  .dark {
+    --background: 24 5% 10%; /* Dark Gray */
+    --foreground: 30 33% 92%;
+    --card: 24 5% 13%;
+    --card-foreground: 30 33% 92%;
+    --popover: 24 5% 10%;
+    --popover-foreground: 30 33% 92%;
+    --primary: 16 100% 66%; /* Vibrant Coral */
+    --primary-foreground: 24 5% 15%;
+    --secondary: 24 5% 18%;
+    --secondary-foreground: 30 33% 92%;
+    --muted: 24 5% 18%;
+    --muted-foreground: 24 5% 65%;
+    --accent: 197 71% 73%; /* Sky Blue */
+    --accent-foreground: 24 5% 15%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 24 5% 22%;
+    --input: 24 5% 22%;
+    --ring: 16 100% 55%;
   }
 }
 
@@ -61,7 +61,7 @@
     background-color: hsl(var(--background));
     background-image: 
       radial-gradient(ellipse at top center, hsl(var(--primary) / 0.1), transparent 70%),
-      linear-gradient(to top, hsl(221, 83%, 10%), transparent 50%);
+      linear-gradient(to top, hsl(var(--background)), transparent 50%);
     background-size: 100% 100%;
     background-attachment: fixed;
   }

@@ -2,16 +2,17 @@ import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Inter, Source_Code_Pro as SourceCodePro } from 'next/font/google';
+import { Playfair_Display as Playfair, PT_Sans as PTSans } from 'next/font/google';
 
-const inter = Inter({ 
+const playfair = Playfair({ 
   subsets: ['latin'], 
-  variable: '--font-inter' 
+  variable: '--font-playfair' 
 });
 
-const sourceCodePro = SourceCodePro({
+const ptSans = PTSans({
   subsets: ['latin'],
-  variable: '--font-source-code-pro',
+  weight: ['400', '700'],
+  variable: '--font-pt-sans',
 });
 
 export const metadata: Metadata = {
@@ -29,9 +30,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt" className={`${inter.variable} ${sourceCodePro.variable}`} suppressHydrationWarning>
+    <html lang="pt" className={`${playfair.variable} ${ptSans.variable}`} suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#1f2937" />
+        <meta name="theme-color" content="#FF7F50" />
       </head>
       <body className="font-body antialiased">
         <ThemeProvider
