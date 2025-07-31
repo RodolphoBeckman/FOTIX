@@ -2,13 +2,22 @@ import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Inter } from 'next/font/google';
+import { Inter, Source_Code_Pro as SourceCodePro } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-inter' 
+});
+
+const sourceCodePro = SourceCodePro({
+  subsets: ['latin'],
+  variable: '--font-source-code-pro',
+});
 
 export const metadata: Metadata = {
   title: 'Fotix',
   description: 'Kit de ferramentas com IA para criação de conteúdo de e-commerce de moda.',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -17,8 +26,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt" className={`${inter.variable}`} suppressHydrationWarning>
-      <head />
+    <html lang="pt" className={`${inter.variable} ${sourceCodePro.variable}`} suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#1f2937" />
+      </head>
       <body className="font-body antialiased">
         <ThemeProvider
           attribute="class"
