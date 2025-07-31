@@ -1,5 +1,5 @@
 'use server';
 
-import { nextHandler } from '@genkit-ai/next';
+import { appRoute } from '@genkit-ai/next';
 
-export { nextHandler as GET, nextHandler as POST };
+export const { GET, POST } = appRoute();
