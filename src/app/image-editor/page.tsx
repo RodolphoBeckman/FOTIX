@@ -169,7 +169,7 @@ export default function ImageEditorPage() {
              <div className="flex flex-col items-center justify-center text-center animate-in fade-in-0 slide-in-from-top-10 duration-700">
                 <div className='flex items-center gap-4'>
                     <Logo className="h-12 w-12"/>
-                    <h1 className="text-5xl font-headline font-bold tracking-tight">Fotix</h1>
+                    <h1 className="text-5xl font-headline font-bold tracking-tight text-gradient">Fotix</h1>
                 </div>
                 <p className="text-muted-foreground text-lg mt-2 max-w-md">
                     Crie conteúdo de alta qualidade para o seu e-commerce com o poder da IA.
@@ -184,7 +184,7 @@ export default function ImageEditorPage() {
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
                 className={cn(
-                  'card-spotlight relative group flex flex-col items-center justify-center p-12 rounded-bloom-bl-br cursor-pointer transition-all duration-300',
+                  'card-spotlight relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-all duration-300',
                   'bg-card/50 border border-dashed',
                   'hover:border-primary/80 hover:bg-card hover:shadow-xl hover:shadow-primary/10',
                   isDragging ? 'border-primary/80 bg-card shadow-xl shadow-primary/20' : 'border-border/20',
@@ -204,14 +204,14 @@ export default function ImageEditorPage() {
                     <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-primary border border-primary/20 shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/20 breathing-element">
                         <ScanSearch className="w-8 h-8" />
                     </div>
-                    <p className="mt-4 text-lg font-semibold">Arraste, cole, ou <span className='text-primary'>clique para escanear</span></p>
+                    <p className="mt-4 text-lg font-semibold">Arraste, cole, ou <span className='text-gradient'>clique para escanear</span></p>
                     <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
                     </div>
                 </div>
             </div>
             
             {files.length > 0 && (
-              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500 bg-card/50 backdrop-blur-sm border-border/20 rounded-bloom-tl-tr">
+              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500 bg-card/50 backdrop-blur-sm border-border/20 rounded-lg">
                  <CardHeader>
                     <CardTitle>Arquivos em Fila</CardTitle>
                     <CardDescription>Revise as imagens selecionadas e escolha o modo de processamento.</CardDescription>
@@ -267,7 +267,7 @@ export default function ImageEditorPage() {
         ) : (
             <div className="space-y-8 animate-in fade-in-0 duration-500">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-3xl font-bold font-headline">Resultados</h2>
+                    <h2 className="text-3xl font-bold font-headline text-gradient">Resultados</h2>
                     <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>
                 </div>
                 <div className="space-y-4">

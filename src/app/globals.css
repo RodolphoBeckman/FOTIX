@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 240 10% 99%; /* Off-white */
     --foreground: 224 71% 4%;
-    --card: 0 0% 100%;
+    --card: 240 10% 100%;
     --card-foreground: 224 71% 4%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
-    --primary: 197 90% 48%; /* Bright Cyan */
+    --primary: 262 88% 66%; /* Vibrant Violet */
     --primary-foreground: 0 0% 100%;
     --secondary: 220 13% 91%;
     --secondary-foreground: 220 14% 9%;
@@ -22,17 +22,18 @@
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 88%;
     --input: 220 13% 94%;
-    --ring: 197 90% 48%;
+    --ring: 262 88% 66%;
+    --radius: 0.75rem;
   }
  
   .dark {
-    --background: 222 84% 5%; /* Deep Blue */
-    --foreground: 210 20% 98%; /* Light Grayish Blue */
-    --card: 222 84% 8%; /* Slightly Lighter Deep Blue */
+    --background: 240 10% 3.9%; /* Near Black */
+    --foreground: 210 20% 98%;
+    --card: 240 5% 8%;
     --card-foreground: 210 20% 98%;
-    --popover: 222 84% 5%;
+    --popover: 240 10% 3.9%;
     --popover-foreground: 210 20% 98%;
-    --primary: 197 90% 48%; /* Bright Cyan */
+    --primary: 262 88% 66%; /* Vibrant Violet */
     --primary-foreground: 222 84% 5%;
     --secondary: 215 28% 17%;
     --secondary-foreground: 210 20% 98%;
@@ -42,9 +43,9 @@
     --accent-foreground: 210 20% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 20% 98%;
-    --border: 215 28% 17%; /* Darker Border */
+    --border: 215 28% 17%;
     --input: 215 28% 17%;
-    --ring: 197 90% 48%;
+    --ring: 262 88% 66%;
   }
 }
 
@@ -61,22 +62,39 @@
   body::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(135deg, hsla(var(--primary), 0.1) 1px, transparent 1px),
-      linear-gradient(225deg, hsla(var(--primary), 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-position: 0 0;
-    animation: move-abstract-bg 30s linear infinite;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 10% 10%, hsl(var(--primary) / 0.1), transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(197 90% 48% / 0.1), transparent 50%),
+      radial-gradient(circle at 30% 90%, hsl(280 90% 55% / 0.15), transparent 50%),
+      radial-gradient(circle at 90% 80%, hsl(320 90% 50% / 0.1), transparent 50%);
+    animation: aurora 20s linear infinite;
+    will-change: background-position;
     z-index: -1;
+  }
+  
+  .dark body::before {
+     background:
+      radial-gradient(circle at 20% 30%, hsl(var(--primary) / 0.2), transparent 40%),
+      radial-gradient(circle at 75% 20%, hsl(197 90% 48% / 0.2), transparent 50%),
+      radial-gradient(circle at 30% 85%, hsl(280 90% 55% / 0.25), transparent 40%),
+      radial-gradient(circle at 90% 80%, hsl(320 90% 50% / 0.2), transparent 50%);
+    animation: aurora 20s linear infinite;
   }
 }
 
 
-@keyframes move-abstract-bg {
-    from { background-position: 0 0; }
-    to { background-position: 80px 80px; }
+@keyframes aurora {
+    0% { background-position: 0% 50%, 50% 100%, 100% 0%, 0% 0%; }
+    25% { background-position: 25% 0%, 100% 50%, 75% 100%, 20% 20%; }
+    50% { background-position: 75% 25%, 50% 0%, 0% 50%, 50% 50%; }
+    75% { background-position: 100% 75%, 0% 25%, 25% 0%, 80% 80%; }
+    100% { background-position: 0% 50%, 50% 100%, 100% 0%, 0% 0%; }
 }
+
 
 .card-spotlight {
   position: relative;
@@ -107,4 +125,10 @@
 
 .breathing-element {
   animation: breathing 5s ease-in-out infinite;
+}
+
+.text-gradient {
+  background: linear-gradient(45deg, hsl(var(--primary)), hsl(197 90% 48%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
