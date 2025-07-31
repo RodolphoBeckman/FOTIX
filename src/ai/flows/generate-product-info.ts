@@ -34,7 +34,7 @@ const GenerateProductInfoOutputSchema = z.object({
   longDescription: z
     .string()
     .describe(
-      'A complete and persuasive HTML description. Start with an inspiring paragraph, followed by an HTML `<ul>` list of 3-5 key features (material, fit, details). End with styling suggestions.'
+      'A complete and persuasive HTML description. It MUST be valid HTML. Follow this structure strictly: Start with an inspiring paragraph in a <p> tag. Follow with an HTML <ul> list of 3-5 key features (material, fit, details), with each item in a <li> tag. End with a final paragraph with styling suggestions, also in a <p> tag. Example: "<p>Paragraph 1.</p><ul><li><strong>Feature:</strong> Detail 1.</li></ul><p>Paragraph 2.</p>"'
     ),
   toneOfVoice: z
     .string()
@@ -73,7 +73,7 @@ const generateProductInfoPrompt = ai.definePrompt({
           *   **Style & Cut**: What is the silhouette? (e.g., midi, longo, evasê, reto, justo, envelope).
           *   **Color & Pattern**: Be specific with colors. (e.g., "azul-marinho profundo", "rosa-quartzo", "estampa floral liberty").
           *   **Unique Details**: Note any special features. (e.g., "botões de madrepérola", "gola assimétrica", "fenda lateral sutil").
-      3.  **Content Generation**: Based on your analysis, generate the content following the output schema precisely.
+      3.  **Content Generation**: Based on your analysis, generate the content following the output schema precisely. For the \`longDescription\`, ensure the HTML is perfectly valid and follows the specified structure with paragraphs and a list.
 
       ## CONTEXT ##
       {{#each imageUrls}}
