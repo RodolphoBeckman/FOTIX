@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Sparkles, Copy, Download, Star, Image as ImageIcon, MonitorSmartphone, Archive } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { cn, formatBytes } from '@/lib/utils';
+import { useSpotlight } from '@/hooks/use-spotlight';
 
 interface ProcessedImagesDisplayProps {
   imageSet: ProcessedImageSet;
@@ -30,6 +31,8 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
   const [favoritedImageIndex, setFavoritedImageIndex] = React.useState<number | null>(0); // Favorite first by default
   const [erpImage, setErpImage] = React.useState<ProcessedImage | null>(null);
   const [isErpLoading, setIsErpLoading] = React.useState(false);
+  const cardRef = useSpotlight<HTMLDivElement>();
+
 
   const { toast } = useToast();
 
@@ -127,7 +130,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     });
   };
   
-  const cardClasses = "relative overflow-hidden animate-in fade-in-0 bg-card/50 backdrop-blur-lg border-border/20 before:absolute before:inset-0 before:rounded-lg before:p-px before:bg-gradient-to-br before:from-cyan-400/30 before:via-purple-500/30 before:to-blue-500/30";
+  const cardClasses = "card-spotlight relative overflow-hidden animate-in fade-in-0 bg-card/50 backdrop-blur-lg border-border/20";
   
   // Group View
   if (isGroup) {
@@ -135,7 +138,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     const allImages = erpImage ? [erpImage, ...websiteImages] : websiteImages;
 
     return (
-      <Card className={cn(cardClasses)}>
+      <Card ref={cardRef} className={cn(cardClasses)}>
         <CardHeader>
           <CardTitle className='font-headline'>Conteúdo do Produto</CardTitle>
           <CardDescription>Selecione o tipo de produto e use a imagem favoritada para gerar descrições com IA.</CardDescription>
@@ -176,7 +179,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     </div>
                 )}
                 {generatedContent && (
-                    <div className="space-y-4 pt-4 fade-in">
+                    <div className="space-y-4 pt-4 animate-in fade-in-0 duration-500">
                     <div>
                         <Label htmlFor="gen-title">Título Gerado</Label>
                         <div className="flex items-center gap-2">
@@ -223,7 +226,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     )}
                     
                     {allImages.map((img, idx) => (
-                    <div key={idx} className="relative group">
+                    <div key={idx} className="relative group animate-in fade-in-0 duration-300" style={{animationDelay: `${idx*50}ms`}}>
                         <div className='text-center mb-2'>
                              <p className="font-semibold font-headline text-sm text-foreground">
                                 {img.width === 2000 ? `ERP (${img.width}x${img.height})` : `Site (${img.width}x${img.height})`}
@@ -264,7 +267,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
   // Individual View
   return (
-    <Card className={cn(cardClasses, "p-0")}>
+    <Card ref={cardRef} className={cn(cardClasses, "p-0")}>
         <CardContent className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             <div className="flex flex-col gap-4">
                  <div className="relative">
@@ -313,7 +316,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                   </div>
               )}
               {generatedContent && (
-                  <div className="space-y-2 pt-2 fade-in text-xs">
+                  <div className="space-y-2 pt-2 animate-in fade-in-0 duration-500 text-xs">
                     <div>
                         <Label htmlFor="gen-title">Título</Label>
                         <div className="flex items-center gap-2">

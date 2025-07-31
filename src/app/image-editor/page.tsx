@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Upload, X, Loader2, Sparkles } from 'lucide-react';
+import { Upload, X, Loader2, Sparkles, ScanSearch } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { Logo } from '@/components/logo';
 import { cn } from '@/lib/utils';
+import { useSpotlight } from '@/hooks/use-spotlight';
 
 type ProcessingMode = 'group' | 'individual';
 
@@ -27,6 +28,8 @@ export default function ImageEditorPage() {
   const [processingMode, setProcessingMode] = React.useState<ProcessingMode>('group');
   const { toast } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const uploadCardRef = useSpotlight<HTMLDivElement>();
+
 
   const addFiles = (newFiles: File[]) => {
       const imageFiles = newFiles.filter(file => file.type.startsWith('image/'));
@@ -159,7 +162,7 @@ export default function ImageEditorPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 animate-in fade-in-0 duration-500">
       <div className="mx-auto max-w-7xl">
         {processedSets.length === 0 ? (
           <div className="space-y-6 max-w-5xl mx-auto">
@@ -174,17 +177,17 @@ export default function ImageEditorPage() {
             </div>
             
             <div
+                ref={uploadCardRef}
                 onDragEnter={handleDragEvents}
                 onDragOver={handleDragEvents}
                 onDragLeave={handleDragEvents}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
                 className={cn(
-                  'relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-all duration-300',
+                  'card-spotlight relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-all duration-300',
                   'bg-card/50 border border-dashed border-border/20',
-                  'hover:border-primary/50',
-                  'before:absolute before:inset-0 before:rounded-lg before:p-px before:bg-gradient-to-br before:from-cyan-400/50 before:via-purple-500/50 before:to-blue-500/50 before:opacity-0 before:transition-opacity hover:before:opacity-100',
-                  isDragging && 'border-primary/80 before:opacity-100'
+                  'hover:border-primary/80 hover:bg-card',
+                  isDragging && 'border-primary/80 bg-card'
                 )}
             >
                 <div className="relative z-10 flex flex-col items-center justify-center text-center">
@@ -197,10 +200,10 @@ export default function ImageEditorPage() {
                         className="hidden"
                     />
                     <div className='flex flex-col items-center justify-center text-center'>
-                    <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-primary border border-primary/20 shadow-sm">
-                        <Upload className="w-8 h-8" />
+                    <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-primary border border-primary/20 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                        <ScanSearch className="w-8 h-8" />
                     </div>
-                    <p className="mt-4 text-lg font-semibold">Arraste e solte, cole, ou <span className='text-primary'>clique para selecionar</span></p>
+                    <p className="mt-4 text-lg font-semibold">Arraste, cole, ou <span className='text-primary'>clique para escanear</span></p>
                     <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
                     </div>
                 </div>
@@ -261,7 +264,7 @@ export default function ImageEditorPage() {
             )}
           </div>
         ) : (
-            <div className="space-y-8">
+            <div className="space-y-8 animate-in fade-in-0 duration-500">
                 <div className="flex justify-between items-center">
                     <h2 className="text-3xl font-bold font-headline">Resultados</h2>
                     <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>

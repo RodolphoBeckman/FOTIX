@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Sparkles, Upload, Download } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
+import { useSpotlight } from '@/hooks/use-spotlight';
 
 export default function ColorEditorPage() {
     const [originalImageFile, setOriginalImageFile] = React.useState<File | null>(null);
@@ -22,6 +24,7 @@ export default function ColorEditorPage() {
         newColor: '',
     });
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const cardRef = useSpotlight<HTMLDivElement>();
     const { toast } = useToast();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,8 +91,8 @@ export default function ColorEditorPage() {
     };
 
     return (
-        <div className="container mx-auto py-10">
-            <Card className="mx-auto max-w-6xl">
+        <div className="container mx-auto py-10 animate-in fade-in-0 duration-500">
+            <Card ref={cardRef} className="card-spotlight mx-auto max-w-6xl">
                 <CardHeader>
                     <CardTitle className="font-headline text-3xl">Editor de Cores com IA</CardTitle>
                     <CardDescription>Mude a cor das roupas em suas fotos de produtos instantaneamente com IA.</CardDescription>
