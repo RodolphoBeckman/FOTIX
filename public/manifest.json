@@ -1,11 +1,7 @@
 {
-  "name": "Fotix - E-commerce Content AI",
+  "name": "Fotix",
   "short_name": "Fotix",
-  "description": "AI-powered toolkit for fashion e-commerce content creation.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#111827",
-  "theme_color": "#10b981",
+  "description": "Kit de ferramentas com IA para criação de conteúdo de e-commerce de moda.",
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -17,5 +13,10 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#1f2937",
+  "background_color": "#1f2937",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
 }

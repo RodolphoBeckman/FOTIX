@@ -12,6 +12,7 @@ export function Logo(props: { className?: string }) {
       width={32}
       height={32}
       className={cn("h-8 w-8", props.className)}
+      unoptimized
     />
   );
 }
