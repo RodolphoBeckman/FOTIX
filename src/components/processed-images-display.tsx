@@ -127,13 +127,15 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     });
   };
   
+  const cardClasses = "relative overflow-hidden animate-in fade-in-0 bg-card/50 backdrop-blur-lg border-border/20 before:absolute before:inset-0 before:rounded-lg before:p-px before:bg-gradient-to-br before:from-cyan-400/30 before:via-purple-500/30 before:to-blue-500/30";
+  
   // Group View
   if (isGroup) {
     const websiteImages = imageSet.images.filter(img => img.width === 1300 && img.height === 2000);
     const allImages = erpImage ? [erpImage, ...websiteImages] : websiteImages;
 
     return (
-      <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm dark:shadow-[0_0_30px_-10px_hsl(var(--primary))]">
+      <Card className={cn(cardClasses)}>
         <CardHeader>
           <CardTitle className='font-headline'>Conteúdo do Produto</CardTitle>
           <CardDescription>Selecione o tipo de produto e use a imagem favoritada para gerar descrições com IA.</CardDescription>
@@ -192,7 +194,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label>Tags Geradas</Label>
                         <div className="flex items-start gap-2">
-                            <div className="p-3 border rounded-md w-full flex flex-wrap gap-2 min-h-[40px]">
+                            <div className="p-3 border rounded-md w-full flex flex-wrap gap-2 min-h-[40px] border-border/20">
                             {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
                             </div>
                             <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>
@@ -215,7 +217,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {isErpLoading && !erpImage && (
-                         <div className="aspect-[130/200] w-full flex flex-col items-center justify-center bg-muted/50 rounded-lg border">
+                         <div className="aspect-[130/200] w-full flex flex-col items-center justify-center bg-muted/50 rounded-lg border border-border/20">
                             <Loader2 className="w-12 h-12 text-primary animate-spin" />
                          </div>
                     )}
@@ -234,7 +236,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                                 alt={`Imagem processada ${img.width}x${img.height}`}
                                 fill
                                 className={cn(
-                                    "rounded-lg border bg-background",
+                                    "rounded-lg border border-border/20 bg-background",
                                     img.width === 2000 ? 'object-contain p-2' : 'object-cover'
                                 )}
                                 data-ai-hint="fashion product"
@@ -262,7 +264,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
   // Individual View
   return (
-    <Card className="overflow-hidden animate-in fade-in-0 bg-card/80 backdrop-blur-sm dark:shadow-[0_0_20px_-5px_hsl(var(--primary))]">
+    <Card className={cn(cardClasses, "p-0")}>
         <CardContent className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             <div className="flex flex-col gap-4">
                  <div className="relative">
@@ -271,7 +273,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                       alt={imageSet.originalFileName}
                       width={130}
                       height={200}
-                      className="rounded-md border object-cover aspect-[130/200]"
+                      className="rounded-md border border-border/20 object-cover aspect-[130/200]"
                       data-ai-hint="fashion product"
                     />
                  </div>
@@ -329,7 +331,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label>Tags</Label>
                         <div className="flex items-start gap-2">
-                            <div className="p-2 border rounded-md w-full flex flex-wrap gap-1 min-h-[32px]">
+                            <div className="p-2 border rounded-md w-full flex flex-wrap gap-1 min-h-[32px] border-border/20">
                               {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
                             </div>
                             <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>

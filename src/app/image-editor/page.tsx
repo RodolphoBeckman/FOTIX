@@ -180,31 +180,34 @@ export default function ImageEditorPage() {
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
                 className={cn(
-                    'relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-colors duration-300',
-                    'bg-card/50 border-2 border-dashed border-border hover:border-primary',
-                    'dark:shadow-[0_0_30px_-5px_hsl(var(--primary))]',
-                    isDragging && 'border-primary bg-primary/10'
+                  'relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-all duration-300',
+                  'bg-card/50 border border-dashed border-border/20',
+                  'hover:border-primary/50',
+                  'before:absolute before:inset-0 before:rounded-lg before:p-px before:bg-gradient-to-br before:from-cyan-400/50 before:via-purple-500/50 before:to-blue-500/50 before:opacity-0 before:transition-opacity hover:before:opacity-100',
+                  isDragging && 'border-primary/80 before:opacity-100'
                 )}
             >
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={(e) => handleFileChange(e.target.files)}
-                    className="hidden"
-                />
-                <div className='flex flex-col items-center justify-center text-center'>
-                  <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-primary border border-primary/20 shadow-sm">
-                    <Upload className="w-8 h-8" />
-                  </div>
-                  <p className="mt-4 text-lg font-semibold">Arraste e solte, cole, ou <span className='text-primary'>clique para selecionar</span></p>
-                  <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
+                <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => handleFileChange(e.target.files)}
+                        className="hidden"
+                    />
+                    <div className='flex flex-col items-center justify-center text-center'>
+                    <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-primary border border-primary/20 shadow-sm">
+                        <Upload className="w-8 h-8" />
+                    </div>
+                    <p className="mt-4 text-lg font-semibold">Arraste e solte, cole, ou <span className='text-primary'>clique para selecionar</span></p>
+                    <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
+                    </div>
                 </div>
             </div>
             
             {files.length > 0 && (
-              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500 bg-card/80 backdrop-blur-sm">
+              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500 bg-card/50 backdrop-blur-sm border-border/20">
                  <CardHeader>
                     <CardTitle>Arquivos em Fila</CardTitle>
                     <CardDescription>Revise as imagens selecionadas e escolha o modo de processamento.</CardDescription>
@@ -213,7 +216,7 @@ export default function ImageEditorPage() {
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
                     {files.map((file, index) => (
                       <div key={index} className="relative group aspect-square">
-                        <Image src={file.preview} alt={file.name} fill className="object-cover rounded-md border" />
+                        <Image src={file.preview} alt={file.name} fill className="object-cover rounded-md border border-border/20" />
                         <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
                             <Button variant="destructive" size="icon" className="h-8 w-8" onClick={() => removeFile(index)}>
                                 <X className="w-4 h-4" />

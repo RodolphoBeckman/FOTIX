@@ -33,7 +33,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6 z-50">
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b border-border/20 bg-background/80 backdrop-blur-sm px-4 md:px-6 z-50">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             href="/image-editor"
@@ -64,7 +64,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-background/95 backdrop-blur-sm">
+          <SheetContent side="left" className="bg-background/95 backdrop-blur-sm border-border/20">
             <nav className="grid gap-6 text-lg font-medium">
               <Link
                 href="#"
@@ -94,7 +94,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       <main className="flex flex-1 flex-col">{children}</main>
-       <footer className="border-t py-6 md:px-8 md:py-0 bg-background/80 backdrop-blur-sm">
+       <footer className="border-t border-border/20 py-6 md:px-8 md:py-0 bg-background/80 backdrop-blur-sm">
           <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
             <div className="flex items-center gap-2 text-muted-foreground">
                <Logo className="h-5 w-5" />
