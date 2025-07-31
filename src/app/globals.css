@@ -54,22 +54,40 @@
   }
   body {
     @apply bg-background text-foreground;
+    position: relative;
+    overflow-x: hidden;
   }
   .dark body {
     background-color: hsl(var(--background));
     background-image: 
-      linear-gradient(to bottom, hsl(var(--background) / 0) 50%, hsl(var(--background)) 100%),
-      radial-gradient(ellipse at top center, hsl(var(--primary) / 0.15), transparent 60%),
-      linear-gradient(to top, hsl(221, 83%, 10%), hsl(var(--background) / 0) 50%);
-    background-size: 100% 100%, 100% 100%, 100% 100%;
+      radial-gradient(ellipse at top center, hsl(var(--primary) / 0.1), transparent 70%),
+      linear-gradient(to top, hsl(221, 83%, 10%), transparent 50%);
+    background-size: 100% 100%;
     background-attachment: fixed;
-    animation: pulse-background 20s ease-in-out infinite alternate;
+  }
+  
+  .dark body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(135deg, hsla(var(--primary), 0.1) 1px, transparent 1px),
+      linear-gradient(225deg, hsla(var(--primary), 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 0 0;
+    animation: move-abstract-bg 30s linear infinite;
+    z-index: -1;
   }
 }
 
 @keyframes pulse-background {
   from { background-position: 0% 0%, 0% 0%, 0% 0%; }
   to { background-position: 0% 0%, 0% 0%, 0% 10%; }
+}
+
+@keyframes move-abstract-bg {
+    from { background-position: 0 0; }
+    to { background-position: 80px 80px; }
 }
 
 .card-spotlight {
