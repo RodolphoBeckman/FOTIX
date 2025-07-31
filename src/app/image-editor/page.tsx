@@ -166,12 +166,12 @@ export default function ImageEditorPage() {
       <div className="mx-auto max-w-7xl">
         {processedSets.length === 0 ? (
           <div className="space-y-6 max-w-5xl mx-auto">
-            <div className="flex flex-col items-center justify-center gap-2 mb-8 text-center">
+             <div className="flex flex-col items-center justify-center text-center animate-in fade-in-0 slide-in-from-top-10 duration-700">
                 <div className='flex items-center gap-4'>
                     <Logo className="h-12 w-12"/>
                     <h1 className="text-5xl font-headline font-bold tracking-tight">Fotix</h1>
                 </div>
-                <p className="text-muted-foreground text-lg mt-2">
+                <p className="text-muted-foreground text-lg mt-2 max-w-md">
                     Crie conteúdo de alta qualidade para o seu e-commerce com o poder da IA.
                 </p>
             </div>
@@ -184,10 +184,11 @@ export default function ImageEditorPage() {
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
                 className={cn(
-                  'card-spotlight relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-all duration-300',
-                  'bg-card/50 border border-dashed border-border/20',
-                  'hover:border-primary/80 hover:bg-card',
-                  isDragging && 'border-primary/80 bg-card'
+                  'card-spotlight relative group flex flex-col items-center justify-center p-12 rounded-bloom-bl-br cursor-pointer transition-all duration-300',
+                  'bg-card/50 border border-dashed',
+                  'hover:border-primary/80 hover:bg-card hover:shadow-xl hover:shadow-primary/10',
+                  isDragging ? 'border-primary/80 bg-card shadow-xl shadow-primary/20' : 'border-border/20',
+                  'animate-in fade-in-0 slide-in-from-bottom-10 duration-700 delay-200'
                 )}
             >
                 <div className="relative z-10 flex flex-col items-center justify-center text-center">
@@ -200,7 +201,7 @@ export default function ImageEditorPage() {
                         className="hidden"
                     />
                     <div className='flex flex-col items-center justify-center text-center'>
-                    <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-primary border border-primary/20 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                    <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-primary border border-primary/20 shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/20 breathing-element">
                         <ScanSearch className="w-8 h-8" />
                     </div>
                     <p className="mt-4 text-lg font-semibold">Arraste, cole, ou <span className='text-primary'>clique para escanear</span></p>
@@ -210,7 +211,7 @@ export default function ImageEditorPage() {
             </div>
             
             {files.length > 0 && (
-              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500 bg-card/50 backdrop-blur-sm border-border/20">
+              <Card className="animate-in fade-in-0 slide-in-from-bottom-10 duration-500 bg-card/50 backdrop-blur-sm border-border/20 rounded-bloom-tl-tr">
                  <CardHeader>
                     <CardTitle>Arquivos em Fila</CardTitle>
                     <CardDescription>Revise as imagens selecionadas e escolha o modo de processamento.</CardDescription>

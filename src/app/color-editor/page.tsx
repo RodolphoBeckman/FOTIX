@@ -100,13 +100,13 @@ export default function ColorEditorPage() {
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                         <div className="space-y-4">
-                            <Card>
+                            <Card className="rounded-bloom-bl-br">
                                 <CardHeader>
                                     <CardTitle className="text-xl">1. Enviar Imagem</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     {!originalImageUrl ? (
-                                        <div onClick={() => fileInputRef.current?.click()} className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg cursor-pointer hover:border-primary/50">
+                                        <div onClick={() => fileInputRef.current?.click()} className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-bloom-bl-br cursor-pointer hover:border-primary/50">
                                             <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                                             <Upload className="w-12 h-12 text-muted-foreground" />
                                             <p className="mt-4 font-semibold">Clique para enviar uma imagem</p>

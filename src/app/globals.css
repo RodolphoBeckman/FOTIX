@@ -4,49 +4,49 @@
 
 @layer base {
   :root {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
+    --background: 210 20% 12%; /* Deep-sea blue */
+    --foreground: 180 50% 90%; /* Soft cyan-white */
 
-    --card: 224 71% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 200 25% 18%;
+    --card-foreground: 180 50% 90%;
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 210 20% 10%;
+    --popover-foreground: 180 50% 90%;
 
-    --primary: 183 100% 50%; /* Electric Cyan */
-    --primary-foreground: 224 71% 4%;
+    --primary: 175 100% 40%; /* Vibrant Cyan */
+    --primary-foreground: 210 20% 12%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 190 30% 25%;
+    --secondary-foreground: 180 50% 90%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215.2 20.2% 65.1%;
+    --muted: 190 30% 25%;
+    --muted-foreground: 190 20% 60%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 180 100% 25%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 183 100% 30%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 183 100% 50%;
+    --border: 175 100% 30%;
+    --input: 200 25% 18%;
+    --ring: 175 100% 50%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
   }
  
   .light {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 98%;
+    --foreground: 210 20% 12%;
 
-    --card: 0 0% 96%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 94%;
+    --card-foreground: 210 20% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 20% 12%;
 
-    --primary: 183 100% 30%; /* Darker Cyan for light mode */
-    --primary-foreground: 210 40% 98%;
+    --primary: 175 100% 30%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -62,7 +62,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 183 100% 30%;
+    --ring: 175 100% 35%;
   }
 }
 
@@ -75,18 +75,19 @@
   }
   .dark body {
     background-color: hsl(var(--background));
-    background-image: 
-      radial-gradient(circle at 15% 50%, hsl(var(--primary) / 0.1), transparent 20%),
-      radial-gradient(circle at 85% 30%, hsl(260 80% 50% / 0.1), transparent 25%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='hsl(var(--primary)/0.05)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
+    background-image:
+      radial-gradient(ellipse at 70% 30%, hsl(var(--primary) / 0.1), transparent 40%),
+      radial-gradient(ellipse at 30% 70%, hsl(260 80% 50% / 0.1), transparent 40%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' width='100' height='100' fill='none' stroke='hsl(var(--primary)/0.03)' stroke-width='1'%3E%3Cpath d='M0,50 Q25,25 50,50 T100,50'/%3E%3Cpath d='M0,50 Q25,75 50,50 T100,50'/%3E%3Cpath d='M50,0 Q25,25 50,50 T75,75'/%3E%3Cpath d='M50,0 Q75,25 50,50 T25,75'/%3E%3C/svg%3E");
+    background-size: 100% 100%, 100% 100%, 150px 150px;
     background-attachment: fixed;
-    animation: move-background 15s linear infinite;
+    animation: pulse-background 20s ease-in-out infinite alternate;
   }
 }
 
-@keyframes move-background {
-  from { background-position: 0 0, 0 0, 0 0; }
-  to { background-position: -200px 0, 200px 0, 128px 128px; }
+@keyframes pulse-background {
+  from { background-position: 0% 0%, 0% 0%, 0px 0px; }
+  to { background-position: 0% 0%, 0% 0%, 50px 50px; }
 }
 
 .card-spotlight {
@@ -101,7 +102,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: radial-gradient(circle at var(--x) var(--y), hsl(var(--primary)/0.15), transparent 30%);
+  background-image: radial-gradient(circle at var(--x) var(--y), hsl(var(--primary)/0.2), transparent 35%);
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   pointer-events: none;
@@ -109,4 +110,13 @@
 
 .card-spotlight:hover:before {
   opacity: 1;
+}
+
+@keyframes breathing {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 5px hsl(var(--primary) / 0.2); }
+  50% { transform: scale(1.02); box-shadow: 0 0 15px hsl(var(--primary) / 0.4); }
+}
+
+.breathing-element {
+  animation: breathing 5s ease-in-out infinite;
 }

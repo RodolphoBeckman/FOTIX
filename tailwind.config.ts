@@ -76,6 +76,10 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        'bloom-tl-tr': '1.5rem 1.5rem 0.5rem 0.5rem',
+        'bloom-br-bl': '0.5rem 0.5rem 1.5rem 1.5rem',
+        'bloom-bl-br': '0.5rem 0.5rem 1.5rem 1.5rem',
+        'bloom-tr-br': '0.5rem 1.5rem 1.5rem 0.5rem',
       },
       keyframes: {
         'accordion-down': {
