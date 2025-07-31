@@ -2,18 +2,13 @@ import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Playfair_Display as Playfair, PT_Sans as PTSans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
-const playfair = Playfair({ 
+const inter = Inter({ 
   subsets: ['latin'], 
-  variable: '--font-playfair' 
+  variable: '--font-inter' 
 });
 
-const ptSans = PTSans({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-pt-sans',
-});
 
 export const metadata: Metadata = {
   title: 'Fotix',
@@ -30,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt" className={`${playfair.variable} ${ptSans.variable}`} suppressHydrationWarning>
+    <html lang="pt" className={`${inter.variable}`} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#FF7F50" />
       </head>

@@ -26,25 +26,25 @@
   }
  
   .dark {
-    --background: 24 5% 10%; /* Dark Gray */
-    --foreground: 30 33% 92%;
-    --card: 24 5% 13%;
-    --card-foreground: 30 33% 92%;
-    --popover: 24 5% 10%;
-    --popover-foreground: 30 33% 92%;
-    --primary: 16 100% 66%; /* Vibrant Coral */
-    --primary-foreground: 24 5% 15%;
-    --secondary: 24 5% 18%;
-    --secondary-foreground: 30 33% 92%;
-    --muted: 24 5% 18%;
-    --muted-foreground: 24 5% 65%;
-    --accent: 197 71% 73%; /* Sky Blue */
-    --accent-foreground: 24 5% 15%;
+    --background: 222 84% 5%;
+    --foreground: 210 20% 98%;
+    --card: 222 84% 8%;
+    --card-foreground: 210 20% 98%;
+    --popover: 222 84% 5%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 210 100% 70%;
+    --primary-foreground: 222 84% 5%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 210 100% 70%;
+    --accent-foreground: 222 84% 5%;
     --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 24 5% 22%;
-    --input: 24 5% 22%;
-    --ring: 16 100% 55%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 210 100% 70%;
   }
 }
 
@@ -60,8 +60,8 @@
   .dark body {
     background-color: hsl(var(--background));
     background-image: 
-      radial-gradient(ellipse at top center, hsl(var(--primary) / 0.1), transparent 70%),
-      linear-gradient(to top, hsl(var(--background)), transparent 50%);
+      radial-gradient(ellipse at top, hsl(var(--primary) / 0.15), transparent 60%),
+      linear-gradient(to bottom, hsl(var(--background) / 0.1) 0%, transparent 100%);
     background-size: 100% 100%;
     background-attachment: fixed;
   }
