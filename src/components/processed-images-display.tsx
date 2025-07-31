@@ -112,12 +112,13 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     }
 
     imagesToDownload.forEach((img, index) => {
-        // Add a small delay so the browser can handle multiple downloads
         setTimeout(() => {
           handleDownload(img.dataUrl, img.fileName);
         }, index * 300);
     });
   };
+
+  const baseCardClasses = "bg-card/50 backdrop-blur-sm border-border/50";
 
   // Group View
   if (isGroup) {
@@ -125,44 +126,42 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     const allImages = erpImage ? [erpImage, ...websiteImages] : websiteImages;
 
     return (
-      <Card className="overflow-hidden animate-in fade-in-0">
+      <Card className={cn("overflow-hidden animate-in fade-in-0", baseCardClasses)}>
         <CardHeader>
           <CardTitle>{imageSet.originalFileName}</CardTitle>
           <CardDescription>Selecione o tipo de produto para gerar o conteúdo. Favorite uma imagem para o site para criar a versão do ERP.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className='space-y-6'>
-            {/* AI Content Generation */}
             <div className="space-y-4">
                 <div className="flex items-end gap-2">
                     <div className="flex-grow">
                     <Label htmlFor={`product-type-${imageSet.originalFileName}`}>Tipo de Produto</Label>
                     <Select value={productType} onValueChange={setProductType}>
-                        <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
-                        <SelectValue placeholder="Selecione um tipo..." />
+                        <SelectTrigger id={`product-type-${imageSet.originalFileName}`} className="bg-background/50">
+                          <SelectValue placeholder="Selecione um tipo..." />
                         </SelectTrigger>
                         <SelectContent>
-                        {productTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                          {productTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                         </SelectContent>
                     </Select>
                     </div>
                     <Button onClick={handleGenerateContent} disabled={!productType || isLoading}>
-                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                    Gerar
+                      {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                      Gerar
                     </Button>
                 </div>
                 {isLoading && (
                     <div className="space-y-4 pt-4">
                         <div className="space-y-2">
-                            <Label className="text-muted-foreground">Gerando Título...</Label>
+                            <Skeleton className="h-4 w-1/4" />
                             <Skeleton className="h-10 w-full" />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-muted-foreground">Gerando Descrição...</Label>
+                            <Skeleton className="h-4 w-1/4" />
                             <Skeleton className="h-24 w-full" />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-muted-foreground">Gerando Tags...</Label>
+                            <Skeleton className="h-4 w-1/4" />
                             <Skeleton className="h-10 w-full" />
                         </div>
                     </div>
@@ -172,21 +171,21 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label htmlFor="gen-title">Título Gerado</Label>
                         <div className="flex items-center gap-2">
-                        <Input id="gen-title" value={generatedContent.title} readOnly className="text-base" />
+                        <Input id="gen-title" value={generatedContent.title} readOnly className="text-base bg-background/50" />
                         <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
                         <Label htmlFor="gen-desc">Descrição Gerada</Label>
                         <div className="flex items-start gap-2">
-                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={6} className="text-base" />
+                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={6} className="text-base bg-background/50" />
                             <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
                         <Label>Tags Geradas</Label>
                         <div className="flex items-start gap-2">
-                            <div className="p-3 border rounded-md w-full flex flex-wrap gap-2 min-h-[40px]">
+                            <div className="p-3 border rounded-md w-full flex flex-wrap gap-2 min-h-[40px] bg-background/50">
                             {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
                             </div>
                             <Button variant="outline" size="icon" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>
@@ -195,12 +194,11 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     </div>
                 )}
             </div>
-          </div>
         </CardContent>
-        <CardFooter className="flex-col items-start bg-secondary/30 p-6">
+        <CardFooter className="flex-col items-start bg-card/80 p-6">
            <div className="w-full space-y-4">
                 <div className="flex justify-between items-center w-full">
-                    <Label>Imagens Geradas</Label>
+                    <Label className="text-lg font-semibold">Imagens Geradas</Label>
                     {(erpImage || websiteImages.length > 0) && (
                         <Button variant="outline" size="sm" onClick={handleDownloadAll}>
                             <Archive className="mr-2 h-4 w-4" />
@@ -218,10 +216,10 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     {allImages.map((img, idx) => (
                     <div key={idx} className="relative group">
                         <div className='text-center mb-2'>
-                             <p className="text-xs text-muted-foreground font-semibold">
+                             <p className="font-semibold text-sm text-foreground">
                                 {img.width === 2000 ? `ERP (${img.width}x${img.height})` : `Site (${img.width}x${img.height})`}
                             </p>
-                             <p className='text-[10px] text-muted-foreground/80'>{formatBytes(img.sizeInBytes)}</p>
+                             <p className='text-xs text-muted-foreground'>{formatBytes(img.sizeInBytes)}</p>
                         </div>
                         <Image
                             src={img.dataUrl}
@@ -229,12 +227,12 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                             width={img.width}
                             height={img.height}
                             className={cn(
-                                "rounded-lg border aspect-[130/200]",
+                                "rounded-lg border aspect-[130/200] bg-background/20",
                                 img.width === 2000 ? 'object-contain' : 'object-cover'
                             )}
                             data-ai-hint="fashion product"
                         />
-                        <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                        <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                             <Button size="sm" onClick={() => handleDownload(img.dataUrl, img.fileName)}>
                                 <Download className="mr-2 h-4 w-4"/>
                                 Baixar
@@ -256,7 +254,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
   // Individual View
   return (
-    <Card className="overflow-hidden animate-in fade-in-0">
+    <Card className={cn("overflow-hidden animate-in fade-in-0", baseCardClasses)}>
         <CardContent className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 p-4">
             <div className="flex flex-col gap-4">
                  <div className="relative">
@@ -284,7 +282,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                   <div className="flex-grow">
                     <Label htmlFor={`product-type-${imageSet.originalFileName}`} className="text-xs">{imageSet.originalFileName}</Label>
                     <Select value={productType} onValueChange={setProductType}>
-                        <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
+                        <SelectTrigger id={`product-type-${imageSet.originalFileName}`} className="bg-background/50">
                           <SelectValue placeholder="Selecione um tipo..." />
                         </SelectTrigger>
                         <SelectContent>
@@ -309,21 +307,21 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     <div>
                         <Label htmlFor="gen-title">Título</Label>
                         <div className="flex items-center gap-2">
-                          <Input id="gen-title" value={generatedContent.title} readOnly className="h-8 text-xs" />
+                          <Input id="gen-title" value={generatedContent.title} readOnly className="h-8 text-xs bg-background/50" />
                           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.title)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
                         <Label htmlFor="gen-desc">Descrição</Label>
                         <div className="flex items-start gap-2">
-                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={3} className="text-xs" />
+                            <Textarea id="gen-desc" value={generatedContent.description} readOnly rows={3} className="text-xs bg-background/50" />
                             <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.description)}><Copy className="h-4 w-4" /></Button>
                         </div>
                     </div>
                     <div>
                         <Label>Tags</Label>
                         <div className="flex items-start gap-2">
-                            <div className="p-2 border rounded-md w-full flex flex-wrap gap-1 min-h-[32px]">
+                            <div className="p-2 border rounded-md w-full flex flex-wrap gap-1 min-h-[32px] bg-background/50">
                               {generatedContent.tags.map(tag => <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>)}
                             </div>
                             <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleCopy(generatedContent.tags.join(', '))}><Copy className="h-4 w-4" /></Button>

@@ -18,7 +18,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['PT Sans', 'sans-serif'],
-        headline: ['Playfair Display', 'serif'],
+        headline: ['PT Sans', 'sans-serif'], // Changed from Playfair
         code: ['Source Code Pro', 'monospace'],
       },
       colors: {
@@ -118,7 +118,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         "fade-in": "fade-in 0.5s ease-in-out",
-        'logo-pulse': 'logo-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'logo-pulse': 'logo-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
     },
   },

@@ -1,17 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { Upload, FileText, ImageIcon, X, Loader2 } from 'lucide-react';
+import { Upload, FileText, ImageIcon, X, Loader2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { processImages, ProcessedImageSet } from '@/lib/image-processor';
 import { ProcessedImagesDisplay } from '@/components/processed-images-display';
-import { formatBytes } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { Logo } from '@/components/logo';
+import { cn } from '@/lib/utils';
 
 type ProcessingMode = 'group' | 'individual';
 
@@ -119,8 +119,8 @@ export default function ImageEditorPage() {
     setProcessedSets([]);
     try {
       const dimensions = processingMode === 'group'
-        ? [{ width: 1300, height: 2000 }] // Only website for group, ERP is on demand
-        : [{ width: 1300, height: 2000 }, { width: 2000, height: 2000 }]; // Both for individual
+        ? [{ width: 1300, height: 2000 }]
+        : [{ width: 1300, height: 2000 }, { width: 2000, height: 2000 }]; 
 
       const results = await processImages(files, dimensions);
 
@@ -163,37 +163,51 @@ export default function ImageEditorPage() {
       <div className="mx-auto max-w-7xl">
         {processedSets.length === 0 ? (
           <div className="space-y-6 max-w-5xl mx-auto">
-            <div className="flex flex-col items-center justify-center gap-2 mb-8">
-                <span className="font-headline text-5xl font-bold tracking-tight">Fotix</span>
-                <p className="text-muted-foreground text-center">
+            <div className="flex flex-col items-center justify-center gap-2 mb-8 text-center">
+                <h1 className="text-5xl font-bold tracking-tight">Fotix</h1>
+                <p className="text-muted-foreground">
                     Crie conteúdo de alta qualidade para o seu e-commerce com o poder da IA.
                 </p>
             </div>
-            <Card
-              onDragEnter={handleDragEvents}
-              onDragOver={handleDragEvents}
-              onDragLeave={handleDragEvents}
-              onDrop={handleDrop}
-              className={`transition-colors ${isDragging ? 'border-primary bg-primary/10' : 'border-border'}`}
-            >
-              <CardContent className="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-lg cursor-pointer hover:border-primary/50" onClick={() => fileInputRef.current?.click()}>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={(e) => handleFileChange(e.target.files)}
-                  className="hidden"
-                />
-                <Logo className="h-16 w-16 mb-4" />
-                <Upload className="w-12 h-12 text-muted-foreground" />
-                <p className="mt-4 text-lg font-semibold">Arraste e solte, cole, ou clique para selecionar</p>
-                <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
-              </CardContent>
-            </Card>
+            
+            <div className="relative">
+              <div
+                  onDragEnter={handleDragEvents}
+                  onDragOver={handleDragEvents}
+                  onDragLeave={handleDragEvents}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current?.click()}
+                  className={cn(
+                      'relative group flex flex-col items-center justify-center p-12 rounded-lg cursor-pointer transition-all duration-300',
+                      'bg-card/50 border-2 border-dashed border-border hover:border-primary/80 hover:bg-card',
+                      'backdrop-blur-sm',
+                      isDragging && 'border-primary/80 bg-card scale-105'
+                  )}
+                  style={{
+                    background: 'radial-gradient(circle at 50% 50%, hsl(var(--card) / 0.5), hsl(var(--background) / 0.5))',
+                  }}
+              >
+                  <div className="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-primary/30 via-sky-500/30 to-primary/30 opacity-0 group-hover:opacity-75 transition-opacity duration-300 blur-lg"></div>
+                  <input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e.target.files)}
+                      className="hidden"
+                  />
+                  <div className='relative z-10 flex flex-col items-center justify-center text-center'>
+                    <div className="mb-4 flex items-center justify-center h-20 w-20 rounded-full bg-background/50 border border-border shadow-inner">
+                      <Upload className="w-10 h-10 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
+                    <p className="mt-4 text-lg font-semibold">Arraste e solte, cole, ou <span className='text-primary'>clique para selecionar</span></p>
+                    <p className="text-sm text-muted-foreground">Suporta: JPG, PNG, WEBP</p>
+                  </div>
+              </div>
+            </div>
             
             {files.length > 0 && (
-              <Card>
+              <Card className="bg-card/50 backdrop-blur-sm animate-in fade-in-0 slide-in-from-bottom-10 duration-500">
                  <CardHeader>
                     <CardTitle>Arquivos em Fila</CardTitle>
                  </CardHeader>
@@ -207,36 +221,36 @@ export default function ImageEditorPage() {
                                 <X className="w-4 h-4" />
                             </Button>
                         </div>
-                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs p-1 truncate rounded-b-md">
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white text-xs p-1 truncate rounded-b-md">
                             {file.name}
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4">
-                    <div>
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+                    <div className="w-full sm:w-auto">
                       <Label className="font-medium text-muted-foreground">Modo de Processamento</Label>
                       <Tabs
                         value={processingMode}
                         onValueChange={(value) => setProcessingMode(value as ProcessingMode)}
                         className="mt-2"
                       >
-                        <TabsList className="bg-secondary/50">
-                          <TabsTrigger value="group" className="font-headline text-base data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                        <TabsList className="bg-background/80 w-full">
+                          <TabsTrigger value="group" className="text-base flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/30">
                             Grupo
                           </TabsTrigger>
-                          <TabsTrigger value="individual" className="font-headline text-base data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                          <TabsTrigger value="individual" className="text-base flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/30">
                             Individual
                           </TabsTrigger>
                         </TabsList>
                       </Tabs>
                     </div>
 
-                    <Button onClick={handleProcessClick} disabled={isProcessing} size="lg">
+                    <Button onClick={handleProcessClick} disabled={isProcessing} size="lg" className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-shadow">
                       {isProcessing ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       ) : (
-                        <FileText className="mr-2 h-4 w-4" />
+                        <Sparkles className="mr-2 h-4 w-4" />
                       )}
                       Processar {files.length} Imagem{files.length > 1 ? 'ns' : ''}
                     </Button>
@@ -248,11 +262,11 @@ export default function ImageEditorPage() {
         ) : (
             <div className="space-y-8">
                 <div className="flex justify-between items-center">
-                    <h2 className="font-headline text-3xl font-bold">Resultados Processados</h2>
+                    <h2 className="text-3xl font-bold">Resultados</h2>
                     <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>
                 </div>
                 <div className="space-y-4">
-                  {processedSets.map((set, index) => (
+                  {processedSets.map((set) => (
                       <ProcessedImagesDisplay 
                           key={processingMode === 'group' ? 'group-set' : set.originalFileName}
                           imageSet={set} 
