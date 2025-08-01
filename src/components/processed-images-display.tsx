@@ -21,7 +21,7 @@ interface ProcessedImagesDisplayProps {
   isGroup: boolean;
 }
 
-const productTypes = ["Vestido", "Camisa", "Camiseta", "Calças", "Jeans", "Shorts", "Saia", "Jaqueta", "Casaco", "Colete", "Bolsa", "Acessório", "Conjunto"];
+const productTypes = ["Blusa", "Calça", "Vestido", "Conjunto", "Blazer", "Colete", "Casaco", "Short", "Saia", "Jaqueta"];
 
 export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDisplayProps) {
   const [productType, setProductType] = React.useState('');
@@ -97,13 +97,10 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     }
   };
 
-  const handleCopy = (text: string) => {
-    // Create a temporary element to hold the HTML content
+  const handleCopy = (htmlText: string) => {
     const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = text;
-    // Get the plain text from the element
-    const plainText = tempDiv.textContent || tempDiv.innerText || '';
-    
+    tempDiv.innerHTML = htmlText;
+    const plainText = tempDiv.textContent || tempDiv.innerText || "";
     navigator.clipboard.writeText(plainText);
     toast({ title: 'Copiado para a área de transferência!' });
   };
