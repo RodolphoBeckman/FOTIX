@@ -104,11 +104,26 @@ export default {
             opacity: '0.9',
           },
         },
+        'fade-in-out': {
+          '0%': {
+            opacity: '0',
+            transform: 'scale(0.95)',
+          },
+          '20%, 80%': {
+            opacity: '1',
+            transform: 'scale(1.05)',
+          },
+          '100%': {
+            opacity: '0',
+            transform: 'scale(0.95)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'logo-pulse': 'logo-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in-out': 'fade-in-out 5s ease-in-out forwards',
       },
     },
   },
