@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { X, Loader2, Sparkles, ScanSearch } from 'lucide-react';
+import { X, Loader2, Sparkles, ScanSearch, Archive } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { processImages, ProcessedImageSet } from '@/lib/image-processor';
+import { processImages, ProcessedImageSet, ProcessedImage } from '@/lib/image-processor';
 import { ProcessedImagesDisplay } from '@/components/processed-images-display';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from '@/components/ui/label';
@@ -175,6 +175,30 @@ export default function ImageEditorPage() {
     setIsProcessing(false);
   }
 
+  const handleDownload = (dataUrl: string, fileName: string) => {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const handleDownloadAllSets = () => {
+      const allImages: ProcessedImage[] = processedSets.flatMap(set => set.images);
+
+      if (allImages.length === 0) {
+          toast({ variant: 'destructive', title: 'Nenhuma imagem para baixar' });
+          return;
+      }
+
+      allImages.forEach((img, index) => {
+          setTimeout(() => {
+            handleDownload(img.dataUrl, img.fileName);
+          }, index * 300);
+      });
+  };
+
   return (
     <div className="container mx-auto py-10 animate-in fade-in-0 duration-500">
       <div className="mx-auto max-w-7xl">
@@ -282,7 +306,13 @@ export default function ImageEditorPage() {
             <div className="space-y-8 animate-in fade-in-0 duration-500">
                 <div className="flex justify-between items-center">
                     <h2 className="text-3xl font-bold font-headline text-gradient">Resultados</h2>
-                    <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" onClick={handleDownloadAllSets}>
+                          <Archive className="mr-2 h-4 w-4" />
+                          Baixar Tudo
+                      </Button>
+                      <Button variant="outline" onClick={handleReset}>Começar de Novo</Button>
+                    </div>
                 </div>
                 <div className="space-y-4">
                   {processedSets.map((set, index) => (
@@ -290,6 +320,7 @@ export default function ImageEditorPage() {
                           key={processingMode === 'group' ? 'group-set' : `${set.originalFileName}-${index}`}
                           imageSet={set} 
                           isGroup={processingMode === 'group'}
+                          onDownload={handleDownload}
                       />
                   ))}
                 </div>

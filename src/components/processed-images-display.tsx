@@ -19,11 +19,12 @@ import { useSpotlight } from '@/hooks/use-spotlight';
 interface ProcessedImagesDisplayProps {
   imageSet: ProcessedImageSet;
   isGroup: boolean;
+  onDownload: (dataUrl: string, fileName: string) => void;
 }
 
 const productTypes = ["Blusa", "Calça", "Vestido", "Conjunto", "Blazer", "Colete", "Casaco", "Short", "Saia", "Jaqueta", "Macacão"];
 
-export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDisplayProps) {
+export function ProcessedImagesDisplay({ imageSet, isGroup, onDownload }: ProcessedImagesDisplayProps) {
   const [productType, setProductType] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [generatedContent, setGeneratedContent] = React.useState<GenerateProductInfoOutput | null>(null);
@@ -105,19 +106,12 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     toast({ title: 'Copiado para a área de transferência!' });
   };
   
-  const handleDownload = (dataUrl: string, fileName: string) => {
-    const link = document.createElement('a');
-    link.href = dataUrl;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
   const handleDownloadAll = () => {
     const imagesToDownload = [...imageSet.images];
     if (isGroup && erpImage) {
         imagesToDownload.unshift(erpImage);
+    } else if (!isGroup) {
+        // In individual mode, both images are already in the set.
     }
 
     if (imagesToDownload.length === 0) {
@@ -127,7 +121,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
     imagesToDownload.forEach((img, index) => {
         setTimeout(() => {
-          handleDownload(img.dataUrl, img.fileName);
+          onDownload(img.dataUrl, img.fileName);
         }, index * 300);
     });
   };
@@ -252,7 +246,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                             />
                         </div>
                         <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                            <Button size="sm" onClick={() => handleDownload(img.dataUrl, img.fileName)}>
+                            <Button size="sm" onClick={() => onDownload(img.dataUrl, img.fileName)}>
                                 <Download className="mr-2 h-4 w-4"/>
                                 Baixar
                             </Button>
@@ -287,10 +281,10 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                     />
                  </div>
                  <div className="flex flex-col gap-2">
-                   <Button size="sm" variant="outline" onClick={() => handleDownload(imageSet.images.find(img => img.width === 1300)!.dataUrl, imageSet.images.find(img => img.width === 1300)!.fileName)}>
+                   <Button size="sm" variant="outline" onClick={() => onDownload(imageSet.images.find(img => img.width === 1300)!.dataUrl, imageSet.images.find(img => img.width === 1300)!.fileName)}>
                      <MonitorSmartphone className="mr-2 h-4 w-4" /> Site
                    </Button>
-                   <Button size="sm" variant="outline" onClick={() => handleDownload(imageSet.images.find(img => img.width === 2000)!.dataUrl, imageSet.images.find(img => img.width === 2000)!.fileName)}>
+                   <Button size="sm" variant="outline" onClick={() => onDownload(imageSet.images.find(img => img.width === 2000)!.dataUrl, imageSet.images.find(img => img.width === 2000)!.fileName)}>
                      <ImageIcon className="mr-2 h-4 w-4" /> ERP
                    </Button>
                    <Button size="sm" onClick={handleDownloadAll}>
