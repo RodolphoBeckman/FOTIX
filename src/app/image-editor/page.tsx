@@ -32,19 +32,33 @@ export default function ImageEditorPage() {
 
 
   const addFiles = (newFiles: File[]) => {
-      const imageFiles = newFiles.filter(file => file.type.startsWith('image/'));
-      if (imageFiles.length > 0) {
-        const filesWithPreview: FileWithPreview[] = imageFiles.map(file => Object.assign(file, {
-            preview: URL.createObjectURL(file)
-        }));
-        setFiles(prevFiles => [...prevFiles, ...filesWithPreview]);
-      } else {
+    const imageFiles = newFiles.filter(file => file.type.startsWith('image/'));
+      if (imageFiles.length === 0) {
         toast({
           variant: 'destructive',
           title: 'Tipo de Arquivo Inválido',
           description: 'Por favor, envie apenas arquivos de imagem.',
         });
+        return;
       }
+    
+    setFiles(prevFiles => {
+        const existingFiles = new Set(prevFiles.map(f => `${f.name}-${f.size}`));
+        const uniqueNewFiles = imageFiles.filter(f => !existingFiles.has(`${f.name}-${f.size}`));
+        
+        if (uniqueNewFiles.length < imageFiles.length) {
+            toast({
+              title: 'Arquivos Duplicados Ignorados',
+              description: 'Algumas imagens já estavam na fila e não foram adicionadas novamente.',
+            })
+        }
+
+        const filesWithPreview: FileWithPreview[] = uniqueNewFiles.map(file => Object.assign(file, {
+            preview: URL.createObjectURL(file)
+        }));
+
+        return [...prevFiles, ...filesWithPreview];
+    });
   };
 
   const handleFileChange = (newFiles: FileList | null) => {
