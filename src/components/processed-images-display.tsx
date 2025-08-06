@@ -47,7 +47,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
       toast({ variant: 'destructive', title: 'Tipo de produto obrigatório' });
       return;
     }
-    const filesForAI = favoritedImageIndex !== null ? [imageSet.originalFiles[favoritedImageIndex]] : imageSet.originalFiles;
+    const filesForAI = favoritedImageIndex !== null && imageSet.originalFiles[favoritedImageIndex] ? [imageSet.originalFiles[favoritedImageIndex]] : imageSet.originalFiles;
      if (filesForAI.length === 0) {
       toast({ variant: 'destructive', title: 'Nenhuma imagem selecionada para gerar conteúdo.' });
       return;
@@ -116,7 +116,7 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
 
   const handleDownloadAll = () => {
     const imagesToDownload = [...imageSet.images];
-    if (erpImage) {
+    if (isGroup && erpImage) {
         imagesToDownload.unshift(erpImage);
     }
 
@@ -293,6 +293,9 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
                    <Button size="sm" variant="outline" onClick={() => handleDownload(imageSet.images.find(img => img.width === 2000)!.dataUrl, imageSet.images.find(img => img.width === 2000)!.fileName)}>
                      <ImageIcon className="mr-2 h-4 w-4" /> ERP
                    </Button>
+                   <Button size="sm" onClick={handleDownloadAll}>
+                     <Archive className="mr-2 h-4 w-4" /> Baixar Todas
+                   </Button>
                  </div>
             </div>
             
@@ -357,7 +360,3 @@ export function ProcessedImagesDisplay({ imageSet, isGroup }: ProcessedImagesDis
     </Card>
   );
 }
-
-    
-
-    
