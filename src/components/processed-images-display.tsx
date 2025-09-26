@@ -6,7 +6,6 @@ import { generateProductInfo, GenerateProductInfoOutput } from '@/ai/flows/gener
 import { getCompressedImageUris, createImageTask, ProcessedImageSet, ProcessedImage } from '@/lib/image-processor';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -21,8 +20,6 @@ interface ProcessedImagesDisplayProps {
   isGroup: boolean;
   onDownload: (dataUrl: string, fileName: string) => void;
 }
-
-const productTypes = ["Blusa", "Calça", "Vestido", "Conjunto", "Blazer", "Colete", "Casaco", "Short", "Saia", "Jaqueta", "Macacão"];
 
 export function ProcessedImagesDisplay({ imageSet, isGroup, onDownload }: ProcessedImagesDisplayProps) {
   const [productType, setProductType] = React.useState('');
@@ -137,21 +134,19 @@ export function ProcessedImagesDisplay({ imageSet, isGroup, onDownload }: Proces
       <Card ref={cardRef} className={cn(cardClasses)}>
         <CardHeader>
           <CardTitle className='font-headline'>Conteúdo do Produto</CardTitle>
-          <CardDescription>Selecione o tipo de produto e use a imagem favoritada para gerar descrições com IA.</CardDescription>
+          <CardDescription>Descreva o produto e use a imagem favoritada para gerar descrições com IA.</CardDescription>
         </CardHeader>
         <CardContent>
             <div className="space-y-4">
                 <div className="flex items-end gap-2">
                     <div className="flex-grow">
-                    <Label htmlFor={`product-type-${imageSet.originalFileName}`}>Tipo de Produto</Label>
-                    <Select value={productType} onValueChange={setProductType}>
-                        <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
-                          <SelectValue placeholder="Selecione um tipo..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {productTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
+                    <Label htmlFor={`product-type-${imageSet.originalFileName}`}>Tipo de Produto e Detalhes</Label>
+                    <Input 
+                      id={`product-type-${imageSet.originalFileName}`}
+                      value={productType}
+                      onChange={(e) => setProductType(e.target.value)}
+                      placeholder="Ex: Saia longa de seda com fenda"
+                    />
                     </div>
                     <Button onClick={handleGenerateContent} disabled={!productType || isLoading}>
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
@@ -297,14 +292,12 @@ export function ProcessedImagesDisplay({ imageSet, isGroup, onDownload }: Proces
               <div className="flex items-end gap-2">
                   <div className="flex-grow">
                     <Label htmlFor={`product-type-${imageSet.originalFileName}`} className="text-xs">{imageSet.originalFileName}</Label>
-                    <Select value={productType} onValueChange={setProductType}>
-                        <SelectTrigger id={`product-type-${imageSet.originalFileName}`}>
-                          <SelectValue placeholder="Selecione um tipo..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {productTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
+                    <Input
+                        id={`product-type-${imageSet.originalFileName}`}
+                        value={productType}
+                        onChange={(e) => setProductType(e.target.value)}
+                        placeholder="Ex: Saia longa de seda"
+                    />
                   </div>
                   <Button onClick={handleGenerateContent} disabled={!productType || isLoading}>
                     {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
